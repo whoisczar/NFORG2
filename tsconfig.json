@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Define o alvo da transpilação
+    "module": "CommonJS", // Define o módulo usado no Node.js
+    "strict": true, // Ativa todas as verificações estritas do TypeScript
+    "esModuleInterop": true, // Permite importar pacotes ES6 com sintaxe CommonJS
+    "skipLibCheck": true, // Ignora a verificação de tipos nas bibliotecas
+    "outDir": "./dist", // Saída dos arquivos transpilados
+    "rootDir": "./src", // Diretório de origem dos arquivos TypeScript
+    "resolveJsonModule": true, // Permite importar arquivos JSON
+    "forceConsistentCasingInFileNames": true // Garantir nomes de arquivos consistentes
+  },
+  "include": ["src/**/*.ts"], // Inclui todos os arquivos .ts do diretório src
+  "exclude": ["node_modules"] // Exclui node_modules
+}
