@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as clientService from "../models/clientModel";
+import * as clientModel from "../models/clientModel";
 
 // Função auxiliar para lidar com erros
 const handleError = (res: Response, message: string, error: any) => {
@@ -13,7 +13,7 @@ export const getAllClientsController = async (
   res: Response
 ): Promise<void> => {
   try {
-    const clients = await clientService.getAllClients();
+    const clients = await clientModel.getAllClients();
     res.status(200).json(clients);
   } catch (err) {
     handleError(res, "Erro ao buscar clientes", err);
@@ -26,7 +26,7 @@ export const getClientByCpfCnpjController = async (
   res: Response
 ): Promise<void> => {
   try {
-    const client = await clientService.getClientByCpfCnpj(req.params.cpfCnpj);
+    const client = await clientModel.getClientByCpfCnpj(req.params.cpfCnpj);
     client
       ? res.status(200).json(client)
       : res.status(404).json({ message: "Cliente não encontrado" });
@@ -41,7 +41,7 @@ export const createClientController = async (
   res: Response
 ): Promise<void> => {
   try {
-    const cpfCnpj = await clientService.createClient(req.body);
+    const cpfCnpj = await clientModel.createClient(req.body);
     res.status(201).json({ cpfCnpj });
   } catch (err) {
     handleError(res, "Erro ao criar cliente", err);
@@ -54,7 +54,7 @@ export const updateClientController = async (
   res: Response
 ): Promise<void> => {
   try {
-    const success = await clientService.updateClient(
+    const success = await clientModel.updateClient(
       req.params.cpfCnpj,
       req.body
     );
@@ -72,7 +72,7 @@ export const deleteClientController = async (
   res: Response
 ): Promise<void> => {
   try {
-    const success = await clientService.deleteClient(req.params.cpfCnpj);
+    const success = await clientModel.deleteClient(req.params.cpfCnpj);
     success
       ? res.status(200).json({ message: "Cliente deletado com sucesso" })
       : res.status(404).json({ message: "Cliente não encontrado" });

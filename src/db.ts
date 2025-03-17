@@ -1,10 +1,14 @@
+import dotenv from "dotenv";
 import mysql from "mysql2/promise";
 
+// Carrega as variáveis de ambiente do arquivo .env
+dotenv.config();
+
 const connection = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "gerenciador",
+  host: process.env.DB_HOST, // Usa "localhost" como fallback, caso não esteja definido
+  user: process.env.DB_USER, // Usa "root" como fallback
+  password: process.env.DB_PASSWORD, // A senha agora vem do arquivo .env
+  database: process.env.DB_NAME, // Nome do banco de dados
 });
 
 // Teste de conexão

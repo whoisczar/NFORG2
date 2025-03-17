@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as ProdutoService from "../models/produtoModel";
+import * as produtoModel from "../models/produtoModel";
 
 // Função auxiliar para tratamento de erro
 const handleError = (res: Response, message: string, error: any): void => {
@@ -13,7 +13,7 @@ export const getAllProdutosController = async (
   res: Response
 ): Promise<void> => {
   try {
-    const produtos = await ProdutoService.getAllProdutos();
+    const produtos = await produtoModel.getAllProdutos();
     res.status(200).json(produtos);
   } catch (err) {
     handleError(res, "Erro ao buscar produtos", err);
@@ -27,7 +27,7 @@ export const getProdutoByIdController = async (
 ): Promise<void> => {
   const id = parseInt(req.params.id);
   try {
-    const produto = await ProdutoService.getProdutoById(id);
+    const produto = await produtoModel.getProdutoById(id);
     if (!produto) {
       res.status(404).json({ message: "Produto não encontrado" });
     } else {
@@ -45,7 +45,7 @@ export const createProdutoController = async (
 ): Promise<void> => {
   const { nomeProduto, eanProduto, valorProduto } = req.body;
   try {
-    const id = await ProdutoService.createProduto(
+    const id = await produtoModel.createProduto(
       nomeProduto,
       eanProduto,
       valorProduto
@@ -64,7 +64,7 @@ export const updateProdutoController = async (
   const id = parseInt(req.params.id);
   const { nomeProduto, eanProduto, valorProduto } = req.body;
   try {
-    const success = await ProdutoService.updateProduto(
+    const success = await produtoModel.updateProduto(
       id,
       nomeProduto,
       eanProduto,
@@ -87,7 +87,7 @@ export const deleteProdutoController = async (
 ): Promise<void> => {
   const id = parseInt(req.params.id);
   try {
-    const success = await ProdutoService.deleteProduto(id);
+    const success = await produtoModel.deleteProduto(id);
     if (success) {
       res.status(200).json({ message: "Produto deletado com sucesso" });
     } else {

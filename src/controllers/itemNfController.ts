@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as ItemNfService from "../models/itemNfModel";
+import * as itemNfModel from "../models/itemNfModel";
 
 // Função auxiliar para tratamento de erro
 const handleError = (res: Response, message: string, error: any): void => {
@@ -13,7 +13,7 @@ export const getAllItensNf = async (
   res: Response
 ): Promise<void> => {
   try {
-    const itensNf = await ItemNfService.getAllItensNf();
+    const itensNf = await itemNfModel.getAllItensNf();
     res.status(200).json(itensNf);
   } catch (err) {
     handleError(res, "Erro ao buscar itens da nota fiscal", err);
@@ -27,7 +27,7 @@ export const getItemNfById = async (
 ): Promise<void> => {
   const { id } = req.params;
   try {
-    const itemNf = await ItemNfService.getItemNfById(Number(id));
+    const itemNf = await itemNfModel.getItemNfById(Number(id));
     if (!itemNf) {
       res.status(404).json({ message: "Item da nota fiscal não encontrado" });
     } else {
@@ -54,7 +54,7 @@ export const createItemNf = async (
   } = req.body;
 
   try {
-    const newItemId = await ItemNfService.createItemNf(
+    const newItemId = await itemNfModel.createItemNf(
       NotaFiscal,
       Produto,
       valorItemNF,
@@ -88,7 +88,7 @@ export const updateItemNf = async (
   } = req.body;
 
   try {
-    const updated = await ItemNfService.updateItemNf(
+    const updated = await itemNfModel.updateItemNf(
       Number(id),
       NotaFiscal,
       Produto,
@@ -118,7 +118,7 @@ export const deleteItemNf = async (
 ): Promise<void> => {
   const { id } = req.params;
   try {
-    const deleted = await ItemNfService.deleteItemNf(Number(id));
+    const deleted = await itemNfModel.deleteItemNf(Number(id));
     if (deleted) {
       res
         .status(200)
