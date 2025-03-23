@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalhes da Nota Fiscal</title>
+    <link rel="stylesheet" href="./styles/sidebar.css" />
+    <link rel="stylesheet" href="./styles/global.css" />
+    <link rel="stylesheet" href="./styles/grafico.css" />
+    <link rel="stylesheet" href="./styles/produto.css" />
+    <script
+      src="https://kit.fontawesome.com/0f47102407.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="menu-item" id="toggleSidebar">
+        <i class="fa-solid fa-bars"></i>
+        <span class="menu-text">Recolher</span>
+      </button>
+      <h4>Menu</h4>
+      <ul>
+        <!-- Itens do menu serão gerados dinamicamente aqui -->
+      </ul>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="content">
+      <h2>Detalhes da Nota Fiscal</h2>
+
+      <!-- Informações da Nota Fiscal -->
+      <div id="detalhesNota">
+        <p><strong>ID da Nota:</strong> <span id="idNotaFiscal"></span></p>
+        <p><strong>Empresa:</strong> <span id="nomeEmpresa"></span></p>
+        <p><strong>Data da Nota:</strong> <span id="dataNotaFiscal"></span></p>
+        <p><strong>Valor Total:</strong> <span id="valorNotaFiscal"></span></p>
+      </div>
+
+      <!-- Tabela de Produtos -->
+      <h3>Produtos</h3>
+      <table id="tabelaProdutos">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Valor Unitário</th>
+            <th>Valor Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Os produtos serão carregados aqui dinamicamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/detalhesNota.js"></script>
+    <script src="./js/sidebar.js"></script>
+  </body>
+</html>

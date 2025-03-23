@@ -1,5 +1,5 @@
 import { RowDataPacket, ResultSetHeader } from "mysql2";
-import db from "../db";
+import db from "../database/db";
 
 export interface Historico extends RowDataPacket {
   idHistorico: number;

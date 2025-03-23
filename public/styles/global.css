@@ -1,0 +1,151 @@
+:root {
+  /** Base colors */
+  --clr-dark-a0: #000000;
+  --clr-light-a0: #ffffff;
+
+  /** Theme primary colors */
+  --clr-primary-a0: #3c1e6b;
+  --clr-primary-a10: #52357b;
+  --clr-primary-a20: #674b8b;
+  --clr-primary-a30: #7c639b;
+  --clr-primary-a40: #917bab;
+  --clr-primary-a50: #a794bc;
+
+  /** Theme surface colors */
+  --clr-surface-a0: #121212;
+  --clr-surface-a10: #282828;
+  --clr-surface-a20: #3f3f3f;
+  --clr-surface-a30: #575757;
+  --clr-surface-a40: #717171;
+  --clr-surface-a50: #8b8b8b;
+
+  /** Theme tonal surface colors */
+  --clr-surface-tonal-a0: #17141b;
+  --clr-surface-tonal-a10: #2c2930;
+  --clr-surface-tonal-a20: #434046;
+  --clr-surface-tonal-a30: #5b585e;
+  --clr-surface-tonal-a40: #747277;
+  --clr-surface-tonal-a50: #8e8c90;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: var(--clr-surface-a0); /* Fundo escuro */
+  color: var(--clr-light-a0); /* Texto branco */
+  display: flex;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Conteúdo Principal */
+.content {
+  height: 100vh;
+  margin-left: 220px;
+  padding: 10px;
+  width: calc(100% - 220px);
+  background-color: var(--clr-surface-tonal-a10); /* Fundo tonal */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.7s;
+}
+
+.content.expanded {
+  margin-left: 70px;
+  width: calc(100% - 50px);
+}
+
+/* Estilos para os Formulários */
+h2 {
+  margin-bottom: 10px;
+  color: var(--clr-primary-a50); /* Título primário */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+form input,
+form select,
+form button {
+  margin-bottom: 8px;
+  padding: 8px;
+  font-size: 16px;
+  background-color: var(--clr-surface-a20); /* Fundo dos inputs */
+  color: var(--clr-light-a0);
+  border: none;
+  border-radius: 5px;
+}
+
+form button {
+  background-color: var(--clr-primary-a20); /* Botão primário */
+  color: var(--clr-light-a0);
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: var(--clr-primary-a30); /* Botão primário hover */
+}
+
+/* Estilos Globais para o Formulário */
+.container {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: none;
+  border-radius: 5px;
+}
+
+label {
+  margin: 5px 0;
+  color: var(--clr-light-a0);
+}
+
+/* Estilos da Tabela */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: var(--clr-surface-tonal-a10);
+  color: var(--clr-light-a0);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+table th,
+table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--clr-surface-a20);
+}
+
+table th {
+  background-color: var(--clr-primary-a20);
+  color: var(--clr-light-a0);
+}
+
+table tbody tr:hover {
+  background-color: var(--clr-surface-a20);
+  cursor: pointer;
+}
+
+table tbody tr td {
+  color: var(--clr-light-a0);
+}

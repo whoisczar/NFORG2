@@ -7,6 +7,24 @@ const handleError = (res: Response, message: string, error: any): void => {
   res.status(500).json({ message, error });
 };
 
+export const searchProdutosController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const query = req.query.q as string; // Obtém o parâmetro de consulta "q"
+  if (!query) {
+    res.status(400).json({ message: "Parâmetro de busca 'q' é obrigatório" });
+    return;
+  }
+
+  try {
+    const produtos = await produtoModel.searchProdutos(query);
+    res.status(200).json(produtos);
+  } catch (err) {
+    res.status(500).json({ message: "Erro ao buscar produtos", error: err });
+  }
+};
+
 // Buscar todos os produtos
 export const getAllProdutosController = async (
   req: Request,

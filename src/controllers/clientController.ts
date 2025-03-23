@@ -7,6 +7,77 @@ const handleError = (res: Response, message: string, error: any) => {
   res.status(500).json({ message, error });
 };
 
+export const cargoVerificationController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { cpfCnpjClient, senhaClient } = req.body;
+
+  // Verifica se os campos foram fornecidos
+  if (!cpfCnpjClient || !senhaClient) {
+    res.status(400).json({ message: "CPF/CNPJ e senha são obrigatórios" });
+    return;
+  }
+
+  try {
+    // Busca o usuário no banco de dados
+    const client = await clientModel.getClientByCpfCnpjAndPassword(
+      cpfCnpjClient,
+      senhaClient
+    );
+
+    if (client) {
+      // Verifica se o cargo é "Admin" ou "Gerente"
+      if (
+        client.cargoClient === "admin" ||
+        client.cargoClient === "Gerente" ||
+        client.cargoClient === "Diretora"
+      ) {
+        res.status(200).json({
+          message: "Login bem-sucedido",
+          isSuperUser: true, // Indica que o cargo é válido
+        });
+      } else {
+        res.status(403).json({
+          message: "Acesso negado. Cargo não autorizado.",
+          isSuperUser: false, // Indica que o cargo não é válido
+        });
+      }
+    } else {
+      res.status(401).json({ message: "Credenciais inválidas" });
+    }
+  } catch (err) {
+    handleError(res, "Erro ao processar login", err);
+  }
+};
+
+export const loginClientController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { cpfCnpjClient, senhaClient } = req.body;
+
+  if (!cpfCnpjClient || !senhaClient) {
+    res.status(400).json({ message: "CPF/CNPJ e senha são obrigatórios" });
+    return;
+  }
+
+  try {
+    const client = await clientModel.getClientByCpfCnpjAndPassword(
+      cpfCnpjClient,
+      senhaClient
+    );
+
+    if (client) {
+      res.status(200).json({ message: "Login bem-sucedido" });
+    } else {
+      res.status(401).json({ message: "Credenciais inválidas" });
+    }
+  } catch (err) {
+    handleError(res, "Erro ao processar login", err);
+  }
+};
+
 // Buscar todos os clientes
 export const getAllClientsController = async (
   req: Request,

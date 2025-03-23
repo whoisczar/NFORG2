@@ -1,4 +1,4 @@
-import db from "../db";
+import db from "../database/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 interface ItemNf extends RowDataPacket {

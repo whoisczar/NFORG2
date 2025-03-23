@@ -1,0 +1,62 @@
+/* Estilos do Modal */
+.modal {
+  display: none; /* Oculto por padrão */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--clr-surface-tonal-a10); /* Fundo tonal */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 10px;
+  color: var(--clr-primary-a50); /* Título primário */
+}
+
+.modal-content p {
+  margin-bottom: 15px;
+  color: var(--clr-light-a0); /* Texto branco */
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: var(--clr-surface-a20); /* Fundo dos inputs */
+  color: var(--clr-light-a0); /* Texto branco */
+  border: none;
+  border-radius: 5px;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--clr-primary-a20); /* Botão primário */
+  color: var(--clr-light-a0); /* Texto branco */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: var(--clr-primary-a30); /* Botão primário hover */
+}
+
+#verificationMessage {
+  margin-top: 10px;
+  color: var(--clr-primary-a50); /* Mensagem de erro/sucesso */
+}

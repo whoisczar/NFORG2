@@ -5,23 +5,19 @@ import {
   createProdutoController,
   updateProdutoController,
   deleteProdutoController,
+  searchProdutosController, // Adicione esta função
 } from "../controllers/produtoController";
 
 const router = express.Router();
 
-// Rota para obter todos os produtos
+// Rota para buscar produtos por nome (usando query parameter)
+router.get("/search", searchProdutosController); // Exemplo: /produtos/search?q=Mouse
+
+// Outras rotas
 router.get("/", getAllProdutosController);
-
-// Rota para buscar um produto por ID
 router.get("/:id", getProdutoByIdController);
-
-// Rota para criar um novo produto
 router.post("/", createProdutoController);
-
-// Rota para atualizar um produto existente
 router.put("/:id", updateProdutoController);
-
-// Rota para deletar um produto
 router.delete("/:id", deleteProdutoController);
 
 export default router;

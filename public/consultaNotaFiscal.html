@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consultar Notas Fiscais</title>
+    <link rel="stylesheet" href="./styles/sidebar.css" />
+    <link rel="stylesheet" href="./styles/global.css" />
+    <link rel="stylesheet" href="./styles/grafico.css" />
+    <link rel="stylesheet" href="./styles/produto.css" />
+    <script
+      src="https://kit.fontawesome.com/0f47102407.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="menu-item" id="toggleSidebar">
+        <i class="fa-solid fa-bars"></i>
+        <span class="menu-text">Recolher</span>
+      </button>
+      <h4>Menu</h4>
+      <ul>
+        <!-- Itens do menu serão gerados dinamicamente aqui -->
+      </ul>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="content">
+      <h2>Consultar Notas Fiscais</h2>
+
+      <!-- Filtro por Nome da Empresa -->
+      <div class="form-group">
+        <label for="filtroEmpresa">Filtrar por Nome da Empresa:</label>
+        <input
+          type="text"
+          id="filtroEmpresa"
+          placeholder="Digite o nome da empresa"
+        />
+        <button type="button" id="btnFiltrar">Filtrar</button>
+      </div>
+
+      <!-- Tabela de Notas Fiscais -->
+      <table id="tabelaNotas">
+        <thead>
+          <tr>
+            <th>ID Nota</th>
+            <th>Empresa</th>
+            <th>Data da Nota</th>
+            <th>Valor Total</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- As notas fiscais serão carregadas aqui dinamicamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/consultarNotas.js"></script>
+    <script src="./js/sidebar.js"></script>
+  </body>
+</html>

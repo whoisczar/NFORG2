@@ -5,12 +5,16 @@ import {
   createNotaFiscalController,
   updateNotaFiscalController,
   deleteNotaFiscalController,
+  searchNotaFiscalController, // Importe o novo controller
 } from "../controllers/notaFiscalController";
 
 const router = express.Router();
 
 // Rota para obter todas as notas fiscais
 router.get("/", getAllNotasFiscaisController);
+
+// Rota para buscar notas fiscais por nome da empresa
+router.get("/search", searchNotaFiscalController); // Exemplo: /notaFiscal/search?empresa=Empresa+Exemplo
 
 // Rota para buscar uma nota fiscal por ID
 router.get("/:id", getNotaFiscalByIdController);

@@ -1,4 +1,4 @@
-import db from "../db";
+import db from "../database/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 interface Client extends RowDataPacket {
@@ -14,6 +14,17 @@ interface Client extends RowDataPacket {
 export const getAllClients = async (): Promise<Client[]> => {
   const [results] = await db.query<Client[]>("SELECT * FROM client");
   return results;
+};
+
+export const getClientByCpfCnpjAndPassword = async (
+  cpfCnpj: string,
+  senha: string
+): Promise<Client | null> => {
+  const [results] = await db.query<Client[]>(
+    "SELECT * FROM client WHERE cpfCnpjClient = ? AND senhaClient = ?",
+    [cpfCnpj, senha]
+  );
+  return results[0] || null;
 };
 
 export const getClientByCpfCnpj = async (

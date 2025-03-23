@@ -1,4 +1,4 @@
-import db from "../db";
+import db from "../database/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 interface Produto extends RowDataPacket {
@@ -7,6 +7,16 @@ interface Produto extends RowDataPacket {
   eanProduto: string;
   valorProduto: number;
 }
+
+export const searchProdutos = async (query: string): Promise<Produto[]> => {
+  const searchQuery = `%${query}%`; // Adiciona wildcards para busca parcial
+  const sql = `
+    SELECT * FROM produto
+    WHERE nomeProduto LIKE ?
+  `;
+  const [results] = await db.query<Produto[]>(sql, [searchQuery]);
+  return results;
+};
 
 // Buscar todos os produtos
 export const getAllProdutos = async (): Promise<Produto[]> => {

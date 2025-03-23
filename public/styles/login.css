@@ -1,0 +1,73 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #121212; /* Fundo escuro */
+  color: #ffffff; /* Texto branco */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Container do Login */
+.login-container {
+  background-color: #2c2930; /* Fundo tonal */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  color: #a794bc; /* Título primário */
+}
+
+/* Estilos para o Formulário */
+.login-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container label {
+  margin-bottom: 5px;
+  color: #ffffff; /* Texto branco */
+  text-align: left;
+}
+
+.login-container input {
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #3f3f3f; /* Fundo dos inputs */
+  color: #ffffff; /* Texto branco */
+  border: none;
+  border-radius: 5px;
+}
+
+.login-container input::placeholder {
+  color: #8b8b8b; /* Placeholder cinza */
+}
+
+.login-container button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #674b8b; /* Botão primário */
+  color: #ffffff; /* Texto branco */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-container button:hover {
+  background-color: #7c639b; /* Botão primário hover */
+}
