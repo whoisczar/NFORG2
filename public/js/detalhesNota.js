@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       const notaFiscal = await response.json();
       exibirDetalhesNota(notaFiscal);
+
+      // Adiciona os eventos de exportação após carregar os dados
+      adicionarEventosExportacao(notaFiscal);
     } catch (error) {
       console.error("Erro:", error);
       alert(
@@ -64,6 +67,154 @@ document.addEventListener("DOMContentLoaded", function () {
       cell.textContent = "Nenhum produto encontrado para esta nota fiscal.";
       cell.style.textAlign = "center";
     }
+  }
+
+  // Função para adicionar eventos de exportação
+  function adicionarEventosExportacao(notaFiscal) {
+    // Exportar para PDF
+    document.getElementById("exportarPdf").addEventListener("click", () => {
+      exportarParaPdf(notaFiscal);
+    });
+
+    // Exportar para CSV
+    document.getElementById("exportarCsv").addEventListener("click", () => {
+      exportarParaCsv(notaFiscal);
+    });
+  }
+
+  // Função para exportar os dados para PDF
+  function exportarParaPdf(notaFiscal) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Definições iniciais
+    const margemEsquerda = 10;
+    let posicaoY = 10; // Posição vertical inicial
+
+    // Título da Nota Fiscal
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(
+      `Nota Fiscal: ${notaFiscal.idNotaFiscal}`,
+      margemEsquerda,
+      posicaoY
+    );
+    posicaoY += 10;
+
+    // Informações da empresa
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Empresa: ${notaFiscal.nomeEmpresa}`, margemEsquerda, posicaoY);
+    posicaoY += 8;
+
+    // Formata a data para YYYY-MM-DD
+    const dataFormatada = new Date(notaFiscal.dataNotaFiscal)
+      .toISOString()
+      .split("T")[0];
+    doc.text(`Data: ${dataFormatada}`, margemEsquerda, posicaoY);
+    posicaoY += 8;
+
+    // Valor total da nota
+    doc.setFont("helvetica", "bold");
+    doc.text(
+      `Valor Total: R$ ${notaFiscal.valorNotaFiscal}`,
+      margemEsquerda,
+      posicaoY
+    );
+    posicaoY += 10;
+
+    // Adiciona os produtos (se houver)
+    if (notaFiscal.produtos && notaFiscal.produtos.length > 0) {
+      doc.setFont("helvetica", "bold");
+      doc.text("Produtos:", margemEsquerda, posicaoY);
+      posicaoY += 8;
+
+      // Cabeçalho da tabela
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text("Nome", margemEsquerda, posicaoY);
+      doc.text("Qtd", margemEsquerda + 80, posicaoY);
+      doc.text("Preço Un.", margemEsquerda + 100, posicaoY);
+      doc.text("Total", margemEsquerda + 140, posicaoY);
+      doc.line(margemEsquerda, posicaoY + 2, 200, posicaoY + 2); // Linha separadora
+      posicaoY += 6;
+
+      // Dados da tabela
+      doc.setFont("helvetica", "normal");
+      notaFiscal.produtos.forEach((produto) => {
+        doc.text(produto.nomeProduto, margemEsquerda, posicaoY);
+        doc.text(`${produto.quantidade}`, margemEsquerda + 80, posicaoY);
+        doc.text(`R$ ${produto.valorProduto}`, margemEsquerda + 100, posicaoY);
+        doc.text(
+          `R$ ${produto.valorProduto * produto.quantidade}`,
+          margemEsquerda + 140,
+          posicaoY
+        );
+        posicaoY += 8;
+      });
+    } else {
+      doc.text("Nenhum produto encontrado.", margemEsquerda, posicaoY);
+    }
+
+    // Adiciona o rodapé
+    const larguraPagina = doc.internal.pageSize.width;
+    const alturaPagina = doc.internal.pageSize.height;
+
+    // Linha horizontal no rodapé
+    doc.line(10, alturaPagina - 15, larguraPagina - 10, alturaPagina - 15);
+
+    // Texto do rodapé centralizado
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "italic");
+    doc.text(
+      "Gerado por NFORG by WhoIsCzar",
+      larguraPagina / 2,
+      alturaPagina - 10,
+      { align: "center" }
+    );
+
+    // Salva o PDF com o nome formatado
+    doc.save(
+      `NF_${notaFiscal.idNotaFiscal}_${notaFiscal.nomeEmpresa}_${dataFormatada}.pdf`
+    );
+  }
+
+  // Função para exportar os dados para CSV
+  function exportarParaCsv(notaFiscal) {
+    // Formata a data para YYYY-MM-DD
+    const dataFormatada = new Date(notaFiscal.dataNotaFiscal)
+      .toISOString()
+      .split("T")[0];
+
+    // Cabeçalho do CSV
+    let conteudoCsv = "\uFEFF"; // BOM para garantir UTF-8
+    conteudoCsv += `"Nota Fiscal","Empresa","Data","Valor Total"\n`;
+    conteudoCsv += `"${notaFiscal.idNotaFiscal}","${notaFiscal.nomeEmpresa}","${dataFormatada}","${notaFiscal.valorNotaFiscal}"\n\n`;
+
+    // Cabeçalho dos produtos
+    conteudoCsv += `"Produto","Quantidade","Valor Unitário","Valor Total"\n`;
+
+    // Adiciona os produtos (se houver)
+    if (notaFiscal.produtos && notaFiscal.produtos.length > 0) {
+      notaFiscal.produtos.forEach((produto) => {
+        conteudoCsv += `"${produto.nomeProduto}","${produto.quantidade}","${
+          produto.valorProduto
+        }","${produto.valorProduto * produto.quantidade}"\n`;
+      });
+    } else {
+      conteudoCsv += `"Nenhum produto encontrado."\n`;
+    }
+
+    // Cria um blob com o conteúdo e gera um link para download
+    const blob = new Blob([conteudoCsv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `NF_${notaFiscal.idNotaFiscal}_${notaFiscal.nomeEmpresa}_${dataFormatada}.csv`;
+    link.click();
+
+    // Libera o objeto URL
+    URL.revokeObjectURL(url);
   }
 
   // Carrega os detalhes da nota fiscal ao iniciar a página

@@ -157,3 +157,18 @@ table tbody tr:hover {
 table tbody tr td {
   color: var(--clr-light-a0);
 }
+
+#exportArea {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+}
+
+#exportArea button {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+#exportArea button:hover {
+  cursor: pointer;
+}

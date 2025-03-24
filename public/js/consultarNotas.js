@@ -6,9 +6,9 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementsByTagName("tbody")[0];
 
   // Função para carregar notas fiscais
-  async function carregarNotasFiscais(filtro = "") {
+  async function carregarNotasFiscais(filtro) {
     try {
-      // Verifica se o filtro está vazio
+      // Se o filtro estiver vazio, não faz nada
       if (!filtro) {
         alert("Por favor, insira o nome da empresa para filtrar.");
         return;
@@ -73,9 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const filtro = filtroEmpresa.value.trim();
     carregarNotasFiscais(filtro);
   });
-
-  // Carregar notas fiscais ao iniciar a página
-  carregarNotasFiscais();
 });
 
 // Função para exibir detalhes da nota fiscal
