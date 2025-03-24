@@ -20,6 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
       text: " Cadastro de Usuários",
       href: "../cadastroUsuario.html", // Link vazio ou ação personalizada
     },
+    {
+      icon: "fas fa-industry",
+      text: " Cadastro de Empresas",
+      href: "../cadastroEmpresa.html", // Link vazio ou ação personalizada
+    },
   ];
 
   const sidebarList = document.querySelector(".sidebar ul");

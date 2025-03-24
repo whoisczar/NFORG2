@@ -42,16 +42,46 @@ export const getClientByCpfCnpj = async (
   return results[0] || null;
 };
 
+//Create client
 export const createClient = async (
   client: Omit<Client, "id">
 ): Promise<string> => {
+  // Validação dos campos obrigatórios
+  if (
+    !client.cpfCnpjClient ||
+    !client.nomeClient ||
+    !client.emailClient ||
+    !client.senhaClient ||
+    !client.cargoClient ||
+    !client.statusClient ||
+    !client.empresa
+  ) {
+    throw new Error("Todos os campos do cliente são obrigatórios.");
+  }
+
   const query = `
     INSERT INTO client (cpfCnpjClient, nomeClient, emailClient, senhaClient, cargoClient, statusClient, empresa)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
-  await db.query<ResultSetHeader>(query, Object.values(client));
+  const values = [
+    client.cpfCnpjClient,
+    client.nomeClient,
+    client.emailClient,
+    client.senhaClient,
+    client.cargoClient,
+    client.statusClient,
+    client.empresa,
+  ];
+
+  // Log para depuração
+  console.log("Executando query:", query);
+  console.log("Valores:", values);
+
+  const [results] = await db.query<ResultSetHeader>(query, values);
   return client.cpfCnpjClient;
 };
+
+//Update Client
 export const updateClient = async (
   cpfCnpjClient: string,
   clientData: Partial<Omit<Client, "cpfCnpjClient">>

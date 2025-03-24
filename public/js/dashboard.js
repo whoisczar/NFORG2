@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       const notas = await response.json();
-      console.log("Notas fiscais recebidas:", notas);
+      console.log("Notas fiscais recebidas");
 
       // Ordena as notas pela data de emissão em ordem decrescente
       const notasOrdenadas = notas.sort((a, b) => {
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       const produtos = await response.json();
-      console.log("Produtos mais vendidos recebidos:", produtos);
+      console.log("Produtos mais vendidos recebidos");
 
       // Prepara os dados para o gráfico
       const labelsProdutos = produtos.map((produto) => produto.nomeProduto);
