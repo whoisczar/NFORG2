@@ -1,0 +1,31 @@
+-- Inserir dados na tabela 'empresa'
+INSERT INTO empresa (nomeEmpresa, cnpjEmpresa, statusEmpresa) VALUES
+  ('Empresa A', '12345678000199', 1),
+  ('Empresa B', '98765432000188', 1);
+
+-- Inserir dados na tabela 'client'
+INSERT INTO client (cpfCnpjClient, nomeClient, emailClient, senhaClient, cargoClient, statusClient, empresa) VALUES
+  ('12345678901', 'João Silva', 'joao@empresa.com', 'senha123', 'Gerente', 1, 1),
+  ('98765432100', 'Maria Oliveira', 'maria@empresa.com', 'senha123', 'Analista', 1, 2);
+
+-- Inserir dados na tabela 'historico'
+INSERT INTO historico (client, observacaoHistorico, dataHistorico) VALUES
+  ('12345678901', 'Observação 1', '2025-01-01 10:00:00'),
+  ('98765432100', 'Observação 2', '2025-02-01 11:00:00');
+
+-- Inserir dados na tabela 'notaFiscal'
+INSERT INTO notaFiscal (valorNotaFiscal, dataNotaFiscal, dataNotaCadastrada, cpf_cnpj) VALUES
+  (1500.00, '2025-01-01 14:30:00', '2025-01-01 14:30:00', '12345678901'),
+  (2200.00, '2025-02-01 15:00:00', '2025-02-01 15:00:00', '98765432100');
+
+-- Inserir dados na tabela 'produto'
+INSERT INTO produto (idProduto, nomeProduto, eanProduto, valorProduto) VALUES
+  (1, 'Produto A', '1234567890123', 100.00),
+  (2, 'Produto B', '9876543210987', 150.00);
+
+-- Inserir dados na tabela 'itemNf'
+INSERT INTO itemNf (NotaFiscal, Produto, valorItemNF, tipoQtdItemNF, qtdItemNF, impostosItemNF, valorTotItemNF) VALUES
+  (1, 1, 100.00, 'UN', 2, 10.00, 210.00),
+  (1, 2, 150.00, 'UN', 1, 15.00, 165.00),
+  (2, 1, 100.00, 'UN', 3, 30.00, 330.00),
+  (2, 2, 150.00, 'UN', 2, 20.00, 340.00);

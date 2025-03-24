@@ -1,0 +1,73 @@
+DROP DATABASE IF EXISTS gerenciador;
+CREATE DATABASE IF NOT EXISTS gerenciador;
+USE gerenciador;
+
+CREATE TABLE empresa (
+    idEmpresa 			INT AUTO_INCREMENT PRIMARY KEY,
+    nomeEmpresa 		VARCHAR(45) NOT NULL,
+    cnpjEmpresa 		VARCHAR(14) NOT NULL UNIQUE,
+	statusEmpresa 		TINYINT DEFAULT 1,
+    INDEX (nomeEmpresa) VISIBLE
+);
+
+CREATE TABLE client (
+    cpfCnpjClient 	VARCHAR(14) NOT NULL PRIMARY KEY,
+    nomeClient 		VARCHAR(45) NOT NULL,
+    emailClient 	VARCHAR(100) NOT NULL,
+    senhaClient 	VARCHAR(100) NOT NULL,
+    cargoClient 	VARCHAR(45),
+    statusClient 	TINYINT DEFAULT 1,
+    empresa 		INT,
+    FOREIGN KEY (empresa)
+	REFERENCES empresa (idEmpresa)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+	INDEX (nomeClient) 	VISIBLE,
+    INDEX (emailClient) VISIBLE
+);
+
+CREATE TABLE historico (
+    client				VARCHAR(14),
+    idHistorico 		INT AUTO_INCREMENT PRIMARY KEY,
+    observacaoHistorico VARCHAR(100),
+    dataHistorico 		DATETIME,
+    FOREIGN KEY (client)
+	REFERENCES client (cpfCnpjClient)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+
+CREATE TABLE notaFiscal (
+    idNotaFiscal 			INT AUTO_INCREMENT PRIMARY KEY,
+    valorNotaFiscal 		DECIMAL(6 , 2 ) NOT NULL,
+    dataNotaFiscal 			DATETIME NOT NULL,
+    dataNotaCadastrada 		DATETIME,
+    cpf_cnpj 				VARCHAR(14) NOT NULL,
+    FOREIGN KEY (cpf_cnpj) REFERENCES client (cpfCnpjClient)
+	ON DELETE NO ACTION 
+    ON UPDATE NO ACTION,
+    INDEX (idNotaFiscal) VISIBLE 
+);
+
+CREATE TABLE produto (
+    idProduto 			INT PRIMARY KEY,
+    nomeProduto 		VARCHAR(45),
+    eanProduto 			VARCHAR(13),
+    valorProduto 		DECIMAL(6 , 2),
+    INDEX (idProduto) 	VISIBLE,
+    INDEX (eanProduto) 	VISIBLE
+);
+
+CREATE TABLE itemNf (
+    idItemNF 		INT AUTO_INCREMENT PRIMARY KEY,
+    NotaFiscal 		INT,
+    Produto 		INT,
+    valorItemNF		DECIMAL(6,2) NOT NULL,
+    tipoQtdItemNF 	VARCHAR(10),
+    qtdItemNF 		DECIMAL(6,2) NOT NULL,
+    impostosItemNF	DECIMAL(6,2) DEFAULT (0),
+    valorTotItemNF 	DECIMAL(6,2) NOT NULL,
+    FOREIGN KEY (NotaFiscal) REFERENCES notafiscal (idNotaFiscal),
+	FOREIGN KEY (Produto) REFERENCES produto (idProduto)
+);
