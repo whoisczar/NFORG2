@@ -78,8 +78,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             {
               label: "Notas por Dia",
               data: dataNotas,
-              backgroundColor: "#52357b",
-              borderColor: "white",
+              backgroundColor: "white",
+              borderColor: "black",
               borderWidth: 1,
             },
           ],
@@ -134,8 +134,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             {
               label: "Quantidade Vendida",
               data: dataProdutos,
-              backgroundColor: "#36a2eb",
-              borderColor: "white",
+              backgroundColor: "#C7815C",
+              borderColor: "black",
               borderWidth: 1,
             },
           ],

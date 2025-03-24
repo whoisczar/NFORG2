@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       icon: "fas fa-edit",
       text: " Cadastrar notas",
-      href: "../cadastroNotaFiscais.html",
+      href: "../cadastroNotasFiscais.html",
     },
     {
       icon: "fas fa-users",

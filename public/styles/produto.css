@@ -16,6 +16,9 @@
   border-radius: 4px;
   cursor: pointer;
 }
+#btnFiltrar :hover {
+  cursor: pointer;
+}
 
 .produto button:disabled {
   background-color: #ccc;
@@ -39,4 +42,20 @@
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.btn-detalhes {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #c7815c; /* Cor de fundo primária */
+  color: #ffffff; /* Cor do texto */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Efeito de hover */
+.btn-detalhes:hover {
+  background-color: #8a5a41; /* Cor de fundo ao passar o mouse */
 }
