@@ -42,29 +42,36 @@ document
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // Busca os usuários cadastrados
     const response = await fetch("http://localhost:3000/client");
     const usuarios = await response.json();
 
-    // Seleciona o corpo da tabela
     const tbody = document.querySelector("#tabelaUsuarios tbody");
-
-    // Limpa o conteúdo atual da tabela
     tbody.innerHTML = "";
 
-    // Preenche a tabela com os dados dos usuários
     usuarios.forEach((usuario) => {
       const row = document.createElement("tr");
+      row.setAttribute("data-id", usuario.cpfCnpjClient); // Usa CPF/CNPJ como identificador
 
       row.innerHTML = `
-          <td>${usuario.nomeClient}</td>
-          <td>${usuario.cpfCnpjClient}</td>
-          <td>${usuario.emailClient}</td>
-          <td>${usuario.cargoClient}</td>
-          <td>${usuario.statusClient === 1 ? "Ativo" : "Inativo"}</td>
-        `;
+        <td>${usuario.nomeClient}</td>
+        <td>${usuario.cpfCnpjClient}</td>
+        <td>${usuario.emailClient}</td>
+        <td>${usuario.cargoClient}</td>
+        <td>${usuario.statusClient === 1 ? "Ativo" : "Inativo"}</td>
+      `;
 
       tbody.appendChild(row);
+    });
+
+    document.querySelectorAll("#tabelaUsuarios tbody tr").forEach((row) => {
+      row.addEventListener("click", () => {
+        const cpfCnpjUsuario = row.getAttribute("data-id"); // Obtém o CPF/CNPJ do usuário
+        if (cpfCnpjUsuario) {
+          window.location.href = `ajustesUsuario.html?cpfCnpj=${cpfCnpjUsuario}`;
+        } else {
+          console.error("CPF/CNPJ do usuário não encontrado!");
+        }
+      });
     });
   } catch (error) {
     console.error("Erro ao carregar usuários:", error);

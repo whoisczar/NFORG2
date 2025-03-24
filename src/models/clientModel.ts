@@ -30,10 +30,15 @@ export const getClientByCpfCnpjAndPassword = async (
 export const getClientByCpfCnpj = async (
   cpfCnpj: string
 ): Promise<Client | null> => {
+  console.log("Executando consulta para CPF/CNPJ:", cpfCnpj);
+
   const [results] = await db.query<Client[]>(
     "SELECT * FROM client WHERE cpfCnpjClient = ?",
     [cpfCnpj]
   );
+
+  console.log("Resultado da consulta no banco:", results);
+
   return results[0] || null;
 };
 
@@ -47,17 +52,32 @@ export const createClient = async (
   await db.query<ResultSetHeader>(query, Object.values(client));
   return client.cpfCnpjClient;
 };
-
 export const updateClient = async (
   cpfCnpjClient: string,
   clientData: Partial<Omit<Client, "cpfCnpjClient">>
 ): Promise<boolean> => {
   const query = `
     UPDATE client
-    SET nomeClient = ?, emailClient = ?, senhaClient = ?, cargoClient = ?, statusClient = ?, empresa = ?
+    SET nomeClient = ?, emailClient = ?, 
+        senhaClient = IFNULL(?, senhaClient),  -- Usando o valor atual caso senhaClient seja null
+        cargoClient = ?, statusClient = ?, empresa = ?
     WHERE cpfCnpjClient = ?
   `;
-  const values = [...Object.values(clientData), cpfCnpjClient];
+
+  const values = [
+    clientData.nomeClient,
+    clientData.emailClient,
+    clientData.senhaClient, // Se for null, o valor atual será mantido
+    clientData.cargoClient,
+    clientData.statusClient,
+    clientData.empresa,
+    cpfCnpjClient,
+  ];
+
+  // Log para depuração
+  console.log("Consulta SQL:", query);
+  console.log("Valores:", values);
+
   const [results] = await db.query<ResultSetHeader>(query, values);
   return results.affectedRows > 0;
 };

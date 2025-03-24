@@ -97,7 +97,12 @@ export const getClientByCpfCnpjController = async (
   res: Response
 ): Promise<void> => {
   try {
+    console.log("CPF/CNPJ recebido na rota:", req.params.cpfCnpj); // Log para verificar entrada
+
     const client = await clientModel.getClientByCpfCnpj(req.params.cpfCnpj);
+
+    console.log("Resultado da consulta:", client); // Log para verificar retorno do banco
+
     client
       ? res.status(200).json(client)
       : res.status(404).json({ message: "Cliente não encontrado" });
@@ -125,6 +130,7 @@ export const updateClientController = async (
   res: Response
 ): Promise<void> => {
   try {
+    console.log("Dados recebidos:", req.body); // Log dos dados recebidos
     const success = await clientModel.updateClient(
       req.params.cpfCnpj,
       req.body
@@ -133,6 +139,7 @@ export const updateClientController = async (
       ? res.status(200).json({ message: "Cliente atualizado com sucesso" })
       : res.status(404).json({ message: "Cliente não encontrado" });
   } catch (err) {
+    console.error("Erro ao atualizar cliente:", err); // Log de erro
     handleError(res, "Erro ao atualizar cliente", err);
   }
 };
