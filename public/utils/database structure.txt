@@ -51,7 +51,7 @@ CREATE TABLE notaFiscal (
 );
 
 CREATE TABLE produto (
-    idProduto 			INT PRIMARY KEY,
+    idProduto 			INT AUTO_INCREMENT PRIMARY KEY,
     nomeProduto 		VARCHAR(45),
     eanProduto 			VARCHAR(13),
     valorProduto 		DECIMAL(6 , 2),

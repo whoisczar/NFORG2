@@ -5,10 +5,11 @@ import mysql from "mysql2/promise";
 dotenv.config();
 
 const connection = mysql.createPool({
-  host: process.env.DB_HOST, // Usa "localhost" como fallback, caso não esteja definido
-  user: process.env.DB_USER, // Usa "root" como fallback
-  password: process.env.DB_PASSWORD, // A senha agora vem do arquivo .env
-  database: process.env.DB_NAME, // Nome do banco de dados
+  host: '127.0.0.1',
+  user: 'root',
+  password: '123456',
+  database: 'gerenciador',
+  port: 3306
 });
 
 // Teste de conexão

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajuste de Usuário</title>
+    <link rel="icon" type="image/x-icon" href="./images/icon.png" />
+    <link rel="stylesheet" href="./styles/sidebar.css" />
+    <link rel="stylesheet" href="./styles/global.css" />
+    <link rel="stylesheet" href="./styles/detalhesUsuario.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/0f47102407.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="menu-item" id="toggleSidebar">
+        <i class="fa-solid fa-bars"></i>
+        <span class="menu-text">Recolher</span>
+      </button>
+      <h4>Menu</h4>
+      <ul>
+        <!-- Itens do menu serão gerados dinamicamente aqui -->
+      </ul>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="content">
+      <h2>Detalhes do Usuário</h2>
+
+      <!-- Informações do Usuário -->
+      <div id="usuarioDetalhes">
+        <p><strong>Nome:</strong> <span id="nomeClient"></span></p>
+        <p><strong>CPF/CNPJ:</strong> <span id="cpfCnpjClient"></span></p>
+        <p><strong>Email:</strong> <span id="emailClient"></span></p>
+        <p><strong>Cargo:</strong> <span id="cargoClient"></span></p>
+        <p><strong>Status:</strong> <span id="statusClient"></span></p>
+      </div>
+
+      <!-- Formulário de Edição -->
+       <hr/>
+       <br/>
+      <h3>Alterar Informações</h3>
+      <br/>
+
+      <form id="formEdicao">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required /><br />
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required /><br />
+        <label for="cargo">Cargo:</label>
+        <input type="text" id="cargo" name="cargo" required /><br />
+        <label for="empresa">Empresa:</label>
+<select id="empresa">
+  <option value="">Selecione a empresa</option>
+</select>
+        <label for="senha">Nova Senha:</label>
+        <input type="password" id="senha" name="senha" /><br />
+        <button type="submit">Salvar Alterações</button>
+      </form>
+
+    <!-- Scripts -->
+    <script src="./js/detalhesEmpresa.js"></script>
+    <script src="./js/sidebar.js"></script>
+  </body>
+</html>

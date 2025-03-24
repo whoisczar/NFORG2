@@ -25,6 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
       text: " Cadastro de Empresas",
       href: "../cadastroEmpresa.html", // Link vazio ou ação personalizada
     },
+    {
+      icon: "fas fa-barcode",
+      text: " Cadastro de Produtos",
+      href: "../cadastroProduto.html", // Link vazio ou ação personalizada
+    },
   ];
 
   const sidebarList = document.querySelector(".sidebar ul");

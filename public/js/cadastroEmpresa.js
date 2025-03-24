@@ -31,7 +31,9 @@ async function cadastrarEmpresa() {
     // Cadastra a empresa
     const responseEmpresa = await fetch("http://localhost:3000/empresa", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(empresa),
     });
 

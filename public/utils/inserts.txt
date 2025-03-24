@@ -1,31 +1,42 @@
--- Inserir dados na tabela 'empresa'
+
+-- Inserindo empresas
 INSERT INTO empresa (nomeEmpresa, cnpjEmpresa, statusEmpresa) VALUES
-  ('Empresa A', '12345678000199', 1),
-  ('Empresa B', '98765432000188', 1);
+('Tech Solutions', '12345678000101', 1),
+('Global Trade', '98765432000199', 1),
+('Eco Energy', '11223344000155', 1);
 
--- Inserir dados na tabela 'client'
+-- Inserindo clientes que representam as empresas com o mesmo CNPJ
 INSERT INTO client (cpfCnpjClient, nomeClient, emailClient, senhaClient, cargoClient, statusClient, empresa) VALUES
-  ('12345678901', 'João Silva', 'joao@empresa.com', 'senha123', 'Gerente', 1, 1),
-  ('98765432100', 'Maria Oliveira', 'maria@empresa.com', 'senha123', 'Analista', 1, 2);
+('12345678000101', 'Tech Solutions', 'contato@techsolutions.com', 'senha123', 'Administrador', 1, 1),
+('98765432000199', 'Global Trade', 'contato@globaltrade.com', 'senha456', 'Administrador', 1, 2),
+('11223344000155', 'Eco Energy', 'contato@ecoenergy.com', 'senha789', 'Administrador', 1, 3);
 
--- Inserir dados na tabela 'historico'
+-- Inserindo outros clientes
+INSERT INTO client (cpfCnpjClient, nomeClient, emailClient, senhaClient, cargoClient, statusClient, empresa) VALUES
+('12345678901', 'Carlos Silva', 'carlos.silva@email.com', 'senha123', 'Gerente', 1, 1),
+('98765432100', 'Ana Pereira', 'ana.pereira@email.com', 'senha456', 'Analista', 1, 2),
+('11223344556', 'João Souza', 'joao.souza@email.com', 'senha789', 'Supervisor', 1, 3);
+
+-- Inserindo histórico de clientes
 INSERT INTO historico (client, observacaoHistorico, dataHistorico) VALUES
-  ('12345678901', 'Observação 1', '2025-01-01 10:00:00'),
-  ('98765432100', 'Observação 2', '2025-02-01 11:00:00');
+('12345678901', 'Primeiro acesso ao sistema', NOW()),
+('98765432100', 'Alteração de senha realizada', NOW()),
+('11223344556', 'Cadastro atualizado', NOW());
 
--- Inserir dados na tabela 'notaFiscal'
+-- Inserindo notas fiscais
 INSERT INTO notaFiscal (valorNotaFiscal, dataNotaFiscal, dataNotaCadastrada, cpf_cnpj) VALUES
-  (1500.00, '2025-01-01 14:30:00', '2025-01-01 14:30:00', '12345678901'),
-  (2200.00, '2025-02-01 15:00:00', '2025-02-01 15:00:00', '98765432100');
+(1500.75, '2024-03-01 10:30:00', NOW(), '12345678901'),
+(780.50, '2024-03-05 14:00:00', NOW(), '98765432100'),
+(2200.90, '2024-03-10 16:45:00', NOW(), '11223344556');
 
--- Inserir dados na tabela 'produto'
-INSERT INTO produto (idProduto, nomeProduto, eanProduto, valorProduto) VALUES
-  (1, 'Produto A', '1234567890123', 100.00),
-  (2, 'Produto B', '9876543210987', 150.00);
+-- Inserindo produtos
+INSERT INTO produto (nomeProduto, eanProduto, valorProduto) VALUES
+('Notebook Dell', '7891234567891', 3500.00),
+('Smartphone Samsung', '7899876543210', 2200.00),
+('Impressora HP', '7896541239870', 780.00);
 
--- Inserir dados na tabela 'itemNf'
+-- Inserindo itens nas notas fiscais
 INSERT INTO itemNf (NotaFiscal, Produto, valorItemNF, tipoQtdItemNF, qtdItemNF, impostosItemNF, valorTotItemNF) VALUES
-  (1, 1, 100.00, 'UN', 2, 10.00, 210.00),
-  (1, 2, 150.00, 'UN', 1, 15.00, 165.00),
-  (2, 1, 100.00, 'UN', 3, 30.00, 330.00),
-  (2, 2, 150.00, 'UN', 2, 20.00, 340.00);
+(1, 1, 3500.00, 'UN', 1, 350.00, 3850.00),
+(2, 2, 2200.00, 'UN', 1, 220.00, 2420.00),
+(3, 3, 780.00, 'UN', 1, 78.00, 858.00);

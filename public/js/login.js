@@ -14,7 +14,7 @@ async function handleLogin(event) {
 
   if (response.status === 200) {
     // Redireciona para a página desejada
-    window.location.href = "../cadastro.html"; // Altere o caminho conforme necessário
+    window.location.href = "../cadastro.html";
     alert(data.message);
   }
 }
