@@ -1,13 +1,17 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const tabelaNotas = document.querySelector("#tabelaNotas tbody");
-  const ctx = document.getElementById("graficoNotas")?.getContext("2d"); // Contexto do gráfico
+  const ctxNotas = document.getElementById("graficoNotas")?.getContext("2d");
+  const ctxProdutos = document
+    .getElementById("graficoProdutosMaisVendidos")
+    ?.getContext("2d");
 
-  // Verifica se o tbody foi encontrado
-  if (!tabelaNotas) {
-    console.error("Elemento tbody não encontrado!");
+  // Verifica se os elementos foram encontrados
+  if (!tabelaNotas || !ctxNotas || !ctxProdutos) {
+    console.error("Elementos não encontrados!");
     return;
   }
 
+  // Função para carregar notas fiscais
   async function carregarNotasFiscais() {
     try {
       const response = await fetch("http://localhost:3000/notaFiscal");
@@ -16,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       const notas = await response.json();
-      console.log("Notas fiscais recebidas:", notas); // Verifique os dados recebidos
+      console.log("Notas fiscais recebidas:", notas);
 
       // Ordena as notas pela data de emissão em ordem decrescente
       const notasOrdenadas = notas.sort((a, b) => {
@@ -32,22 +36,29 @@ document.addEventListener("DOMContentLoaded", async function () {
       // Preenche a tabela com os dados filtrados
       ultimas10Notas.forEach((nota) => {
         const row = document.createElement("tr");
+        row.setAttribute("data-id", nota.idNotaFiscal); // Adiciona o ID da nota como atributo
         row.innerHTML = `
-                <td>${nota.idNotaFiscal}</td>
-                <td>${nota.nomeClient}</td>
-                <td>R$ ${nota.valorNotaFiscal}</td>
-                <td>${new Date(nota.dataNotaFiscal).toLocaleDateString()}</td>
-                <td>${new Date(
-                  nota.dataNotaCadastrada
-                ).toLocaleDateString()}</td>
-              `;
+          <td>${nota.idNotaFiscal}</td>
+          <td>${nota.nomeClient}</td>
+          <td>R$ ${nota.valorNotaFiscal}</td>
+          <td>${new Date(nota.dataNotaFiscal).toLocaleDateString()}</td>
+          <td>${new Date(nota.dataNotaCadastrada).toLocaleDateString()}</td>
+        `;
         tabelaNotas.appendChild(row);
       });
 
-      // Processa os dados para o gráfico
+      // Adiciona o evento de clique às linhas da tabela
+      tabelaNotas.querySelectorAll("tr[data-id]").forEach((row) => {
+        row.addEventListener("click", () => {
+          const idNotaFiscal = row.getAttribute("data-id"); // Obtém o ID da nota
+          detalharNota(idNotaFiscal); // Chama a função de redirecionamento
+        });
+      });
+
+      // Processa os dados para o gráfico de notas por dia
       const notasPorDia = {};
       notas.forEach((nota) => {
-        const data = new Date(nota.dataNotaFiscal).toLocaleDateString(); // Usando dataNotaFiscal
+        const data = new Date(nota.dataNotaFiscal).toLocaleDateString();
         if (notasPorDia[data]) {
           notasPorDia[data]++;
         } else {
@@ -55,24 +66,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       });
 
-      const labels = Object.keys(notasPorDia); // Dias
-      const data = Object.values(notasPorDia); // Quantidade de notas por dia
+      const labelsNotas = Object.keys(notasPorDia); // Dias
+      const dataNotas = Object.values(notasPorDia); // Quantidade de notas por dia
 
-      // Verifica se o contexto do gráfico foi encontrado
-      if (!ctx) {
-        console.error("Elemento canvas não encontrado!");
-        return;
-      }
-
-      // Cria o gráfico
-      new Chart(ctx, {
-        type: "bar", // Tipo de gráfico (pode ser "line" para gráfico de linha)
+      // Cria o gráfico de notas por dia
+      new Chart(ctxNotas, {
+        type: "bar",
         data: {
-          labels: labels,
+          labels: labelsNotas,
           datasets: [
             {
               label: "Notas por Dia",
-              data: data,
+              data: dataNotas,
               backgroundColor: "#52357b",
               borderColor: "white",
               borderWidth: 1,
@@ -80,8 +85,8 @@ document.addEventListener("DOMContentLoaded", async function () {
           ],
         },
         options: {
-          responsive: true, // Torna o gráfico responsivo
-          maintainAspectRatio: false, // Permite ajustar a proporção
+          responsive: true,
+          maintainAspectRatio: false,
           scales: {
             y: {
               beginAtZero: true,
@@ -89,8 +94,8 @@ document.addEventListener("DOMContentLoaded", async function () {
           },
           plugins: {
             legend: {
-              display: true, // Exibe a legenda
-              position: "top", // Posição da legenda
+              display: true,
+              position: "top",
             },
           },
         },
@@ -100,5 +105,68 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
+  async function carregarProdutosMaisVendidos() {
+    try {
+      // Defina as datas inicial e final (exemplo: último mês)
+      const dataInicial = "2023-09-01"; // Substitua pela data inicial desejada
+      const dataFinal = "2023-09-30"; // Substitua pela data final desejada
+
+      const response = await fetch(
+        `http://localhost:3000/produto/mais-vendidos?dataInicial=${dataInicial}&dataFinal=${dataFinal}`
+      );
+      if (!response.ok) {
+        throw new Error("Erro ao buscar produtos mais vendidos");
+      }
+
+      const produtos = await response.json();
+      console.log("Produtos mais vendidos recebidos:", produtos);
+
+      // Prepara os dados para o gráfico
+      const labelsProdutos = produtos.map((produto) => produto.nomeProduto);
+      const dataProdutos = produtos.map((produto) => produto.total_vendido);
+
+      // Cria o gráfico de produtos mais vendidos
+      new Chart(ctxProdutos, {
+        type: "bar",
+        data: {
+          labels: labelsProdutos,
+          datasets: [
+            {
+              label: "Quantidade Vendida",
+              data: dataProdutos,
+              backgroundColor: "#36a2eb",
+              borderColor: "white",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: "top",
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Erro ao carregar produtos mais vendidos:", error);
+    }
+  }
+
+  // Carrega as notas fiscais e os produtos mais vendidos
   await carregarNotasFiscais();
+  await carregarProdutosMaisVendidos();
 });
+
+// Função para redirecionar para a página de detalhes da nota
+window.detalharNota = function (idNotaFiscal) {
+  window.location.href = `detalhesNota.html?id=${idNotaFiscal}`;
+};

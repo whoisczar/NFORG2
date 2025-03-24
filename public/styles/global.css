@@ -46,14 +46,15 @@ body {
 
 /* Conteúdo Principal */
 .content {
-  height: 100vh;
+  height: auto; /* Altura automática para acomodar o conteúdo */
   margin-left: 220px;
-  padding: 10px;
+  padding: 20px; /* Aumente o padding para mais espaço */
   width: calc(100% - 220px);
-  background-color: var(--clr-surface-tonal-a10); /* Fundo tonal */
+  background-color: var(--clr-surface-tonal-a10);
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: all 0.7s;
+  overflow-y: auto; /* Adiciona scroll se o conteúdo for muito longo */
 }
 
 .content.expanded {
@@ -61,6 +62,9 @@ body {
   width: calc(100% - 50px);
 }
 
+button :hover {
+  cursor: pointer;
+}
 /* Estilos para os Formulários */
 h2 {
   margin-bottom: 10px;
@@ -83,6 +87,10 @@ form button {
   color: var(--clr-light-a0);
   border: none;
   border-radius: 5px;
+}
+
+#btnFiltrar :hover {
+  cursor: pointer;
 }
 
 form button {

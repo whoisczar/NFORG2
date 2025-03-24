@@ -5,14 +5,16 @@ import {
   createProdutoController,
   updateProdutoController,
   deleteProdutoController,
-  searchProdutosController, // Adicione esta função
+  searchProdutosController,
+  getProdutosMaisVendidosController,
 } from "../controllers/produtoController";
 
 const router = express.Router();
 
 // Rota para buscar produtos por nome (usando query parameter)
 router.get("/search", searchProdutosController); // Exemplo: /produtos/search?q=Mouse
-
+// Rota para buscar produtos por mais vendido (usando query parameter)
+router.get("/mais-vendidos", getProdutosMaisVendidosController);
 // Outras rotas
 router.get("/", getAllProdutosController);
 router.get("/:id", getProdutoByIdController);

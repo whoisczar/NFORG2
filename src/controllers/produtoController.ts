@@ -7,6 +7,21 @@ const handleError = (res: Response, message: string, error: any): void => {
   res.status(500).json({ message, error });
 };
 
+export const getProdutosMaisVendidosController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    console.log("Buscando produtos mais vendidos..."); // Log para depuração
+    const produtos = await produtoModel.getProdutosMaisVendidos();
+    console.log("Produtos mais vendidos encontrados:", produtos); // Log para depuração
+    res.status(200).json(produtos);
+  } catch (err) {
+    console.error("Erro ao buscar produtos mais vendidos:", err); // Log para depuração
+    handleError(res, "Erro ao buscar produtos mais vendidos", err);
+  }
+};
+
 export const searchProdutosController = async (
   req: Request,
   res: Response
@@ -44,6 +59,13 @@ export const getProdutoByIdController = async (
   res: Response
 ): Promise<void> => {
   const id = parseInt(req.params.id);
+
+  // Validação do ID
+  if (isNaN(id)) {
+    res.status(400).json({ message: "ID do produto inválido" });
+    return;
+  }
+
   try {
     const produto = await produtoModel.getProdutoById(id);
     if (!produto) {

@@ -8,6 +8,34 @@ interface Produto extends RowDataPacket {
   valorProduto: number;
 }
 
+interface ProdutoMaisVendido extends RowDataPacket {
+  idProduto: number;
+  nomeProduto: string;
+  total_vendido: number;
+}
+
+// Função para buscar produtos mais vendidos
+export const getProdutosMaisVendidos = async (): Promise<
+  ProdutoMaisVendido[]
+> => {
+  const query = `
+    SELECT 
+      p.idProduto, 
+      p.nomeProduto, 
+      SUM(i.qtdItemNF) AS total_vendido
+    FROM 
+      produto p
+    JOIN 
+      itemNf i ON p.idProduto = i.Produto
+    GROUP BY 
+      p.idProduto, p.nomeProduto
+    ORDER BY 
+      total_vendido DESC;
+  `;
+  const [results] = await db.query<ProdutoMaisVendido[]>(query);
+  return results;
+};
+
 export const searchProdutos = async (query: string): Promise<Produto[]> => {
   const searchQuery = `%${query}%`; // Adiciona wildcards para busca parcial
   const sql = `
@@ -31,7 +59,6 @@ export const getProdutoById = async (id: number): Promise<Produto | null> => {
   const [results] = await db.query<Produto[]>(query, [id]);
   return results[0] || null;
 };
-
 // Criar um novo produto
 export const createProduto = async (
   nomeProduto: string,
