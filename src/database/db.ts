@@ -5,11 +5,11 @@ import mysql from "mysql2/promise";
 dotenv.config();
 
 const connection = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '123456',
-  database: 'gerenciador',
-  port: 3306
+  host: process.env.DB_HOST || "localhost",
+  port: Number(process.env.DB_PORT) || 3306,
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "root",
+  database: process.env.DB_NAME || "gerenciador",
 });
 
 // Teste de conexão
