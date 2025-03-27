@@ -1,20 +1,21 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const idEmpresa = urlParams.get("id");
+  const id = urlParams.get("id");
 
-  if (!idEmpresa) {
-    document.body.innerHTML = "<h2>Id não encontrado!</h2>";
+  if (!id) {
+    document.body.innerHTML = "<h2>id não encontrado!</h2>";
     return;
   }
 
   try {
     // Carrega as informações da empresa
-    const response = await fetch(`http://localhost:3000/empresa/${idEmpresa}`);
+    const response = await fetch(`http://localhost:3000/empresa/${id}`);
     if (!response.ok) {
       throw new Error("Empresa não encontrada");
     }
 
     const empresa = await response.json();
+    console.log(`${JSON.stringify(empresa)} carregada`);
 
     // Preenche os campos com os dados atuais
     document.getElementById("nomeEmpresa").textContent = empresa.nomeEmpresa;
@@ -48,16 +49,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/empresa/${cnpjEmpresa}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(empresaData),
-        }
-      );
+      const response = await fetch(`http://localhost:3000/empresa/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(empresaData),
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao atualizar empresa");

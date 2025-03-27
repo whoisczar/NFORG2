@@ -68,7 +68,26 @@ document.addEventListener("DOMContentLoaded", function () {
       cell.style.textAlign = "center";
     }
   }
+  // Função para formatar a data e hora corretamente
+  function formatarDataHoraBrasileira(data) {
+    return data.toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  }
 
+  // Função para formatar data no nome do arquivo (YYYY-MM-DD_HH-MM-SS)
+  function formatarDataParaArquivo(data) {
+    return data
+      .toISOString()
+      .replace("T", "_")
+      .replace(/:/g, "-")
+      .split(".")[0]; // Remove milissegundos
+  }
   // Função para adicionar eventos de exportação
   function adicionarEventosExportacao(notaFiscal) {
     // Exportar para PDF
@@ -107,11 +126,21 @@ document.addEventListener("DOMContentLoaded", function () {
     doc.text(`Empresa: ${notaFiscal.nomeEmpresa}`, margemEsquerda, posicaoY);
     posicaoY += 8;
 
-    // Formata a data para YYYY-MM-DD
-    const dataFormatada = new Date(notaFiscal.dataNotaFiscal)
-      .toISOString()
-      .split("T")[0];
-    doc.text(`Data: ${dataFormatada}`, margemEsquerda, posicaoY);
+    const dataNotaFiscal = new Date(notaFiscal.dataNotaFiscal);
+    const dataGerada = new Date();
+
+    doc.text(
+      `Data: ${formatarDataHoraBrasileira(dataNotaFiscal)}`,
+      margemEsquerda,
+      posicaoY
+    );
+    posicaoY += 8;
+
+    doc.text(
+      `Gerada em: ${formatarDataHoraBrasileira(dataGerada)}`,
+      margemEsquerda,
+      posicaoY
+    );
     posicaoY += 8;
 
     // Valor total da nota
@@ -173,23 +202,35 @@ document.addEventListener("DOMContentLoaded", function () {
       { align: "center" }
     );
 
-    // Salva o PDF com o nome formatado
+    // Salva o PDF com o nome formatado corretamente
+    const dataFormatadaArquivo = formatarDataParaArquivo(dataGerada);
     doc.save(
-      `NF_${notaFiscal.idNotaFiscal}_${notaFiscal.nomeEmpresa}_${dataFormatada}.pdf`
+      `NF_${notaFiscal.idNotaFiscal}_${notaFiscal.nomeEmpresa}_${dataFormatadaArquivo}.pdf`
     );
   }
 
   // Função para exportar os dados para CSV
   function exportarParaCsv(notaFiscal) {
     // Formata a data para YYYY-MM-DD
-    const dataFormatada = new Date(notaFiscal.dataNotaFiscal)
-      .toISOString()
-      .split("T")[0];
+    function formatarDataParaCsv(data) {
+      return (
+        data.toLocaleDateString("pt-BR") +
+        " " +
+        data.toLocaleTimeString("pt-BR")
+      );
+    }
+
+    const dataNotaFiscal = new Date(notaFiscal.dataNotaFiscal);
+    const dataGerada = new Date();
 
     // Cabeçalho do CSV
     let conteudoCsv = "\uFEFF"; // BOM para garantir UTF-8
     conteudoCsv += `"Nota Fiscal","Empresa","Data","Valor Total"\n`;
-    conteudoCsv += `"${notaFiscal.idNotaFiscal}","${notaFiscal.nomeEmpresa}","${dataFormatada}","${notaFiscal.valorNotaFiscal}"\n\n`;
+    conteudoCsv += `"${notaFiscal.idNotaFiscal}","${
+      notaFiscal.nomeEmpresa
+    }","${formatarDataParaCsv(dataNotaFiscal)}","${
+      notaFiscal.valorNotaFiscal
+    }"\n\n`;
 
     // Cabeçalho dos produtos
     conteudoCsv += `"Produto","Quantidade","Valor Unitário","Valor Total"\n`;
@@ -210,7 +251,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `NF_${notaFiscal.idNotaFiscal}_${notaFiscal.nomeEmpresa}_${dataFormatada}.csv`;
+    link.download = `NF_${notaFiscal.idNotaFiscal}_${
+      notaFiscal.nomeEmpresa
+    }_${formatarDataParaArquivo(dataGerada)}.csv`;
     link.click();
 
     // Libera o objeto URL

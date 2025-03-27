@@ -71,11 +71,19 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       // Cria o gráfico de notas por dia
       new Chart(ctxNotas, {
-        type: "bar",
         data: {
           labels: labelsNotas,
           datasets: [
             {
+              type: "line",
+              label: "Notas por Dia",
+              data: dataNotas,
+              backgroundColor: "white",
+              borderColor: "black",
+              borderWidth: 1,
+            },
+            {
+              type: "bar",
               label: "Notas por Dia",
               data: dataNotas,
               backgroundColor: "white",
@@ -108,8 +116,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   async function carregarProdutosMaisVendidos() {
     try {
       // Defina as datas inicial e final (exemplo: último mês)
-      const dataInicial = "2023-09-01"; // Substitua pela data inicial desejada
-      const dataFinal = "2023-09-30"; // Substitua pela data final desejada
+      const dataInicial = "1999-01-01"; // Substitua pela data inicial desejada
+      const dataFinal = "9999-01-01"; // Substitua pela data final desejada
 
       const response = await fetch(
         `http://localhost:3000/produto/mais-vendidos?dataInicial=${dataInicial}&dataFinal=${dataFinal}`
@@ -168,5 +176,5 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 // Função para redirecionar para a página de detalhes da nota
 window.detalharNota = function (idNotaFiscal) {
-  window.location.href = `detalhesNota.html?id=${idNotaFiscal}`;
+  window.location.href = `ajustesNota.html?id=${idNotaFiscal}`;
 };

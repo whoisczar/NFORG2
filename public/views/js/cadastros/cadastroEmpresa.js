@@ -77,7 +77,7 @@ async function carregarEmpresas() {
 
     empresas.forEach((empresa) => {
       const row = document.createElement("tr");
-      row.setAttribute("data-id", empresa.cnpjEmpresa);
+      row.setAttribute("data-id", empresa.idEmpresa);
 
       row.innerHTML = `
             <td>${empresa.nomeEmpresa}</td>
@@ -86,7 +86,7 @@ async function carregarEmpresas() {
           `;
 
       row.addEventListener("click", () =>
-        redirecionarParaAjustes(empresa.cnpjEmpresa)
+        redirecionarParaAjustes(empresa.idEmpresa)
       );
 
       tbody.appendChild(row);
@@ -98,11 +98,11 @@ async function carregarEmpresas() {
 
 /**
  * Redireciona para a página de ajustes da empresa.
- * @param {string} cnpjEmpresa - CNPJ da empresa para ajustes.
+ * @param {string} idEmpresa - CNPJ da empresa para ajustes.
  */
-function redirecionarParaAjustes(cnpjEmpresa) {
-  if (cnpjEmpresa) {
-    window.location.href = `ajustesEmpresa.html?cnpj=${cnpjEmpresa}`;
+function redirecionarParaAjustes(idEmpresa) {
+  if (idEmpresa) {
+    window.location.href = `ajustesEmpresa.html?id=${idEmpresa}`;
   } else {
     console.error("CNPJ da empresa não encontrado!");
   }

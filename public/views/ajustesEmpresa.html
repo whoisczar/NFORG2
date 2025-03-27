@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajuste da empresa</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://img.icons8.com/?size=100&id=37930&format=png&color=000000"
+    />
+    <link rel="stylesheet" href="./styles/sidebar.css" />
+    <link rel="stylesheet" href="./styles/global.css" />
+    <link rel="stylesheet" href="./styles/detalhesUsuario.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/0f47102407.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="menu-item" id="toggleSidebar">
+        <i class="fa-solid fa-bars"></i>
+        <span class="menu-text">Recolher</span>
+      </button>
+      <h4>Menu</h4>
+      <ul>
+        <!-- Itens do menu serão gerados dinamicamente aqui -->
+      </ul>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="content">
+      <h2>Detalhes da empresa</h2>
+      <hr />
+      <br />
+      <h3>Alterar Informações</h3>
+      <br />
+
+      <!-- Exibição dos detalhes da empresa -->
+      <p><strong>Nome:</strong> <span id="nomeEmpresa"></span></p>
+      <p><strong>CNPJ:</strong> <span id="cnpjEmpresa"></span></p>
+      <p><strong>Status:</strong> <span id="statusEmpresa"></span></p>
+      <br />
+      <hr />
+      <!-- Formulário de edição -->
+      <form id="formEdicaoEmpresa">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required /><br />
+
+        <label for="cnpj">CNPJ:</label>
+        <input type="text" id="cnpj" name="cnpj" required /><br />
+        <label for="status">Status:</label>
+        <select id="status">
+          <option value="1">Ativo</option>
+          <option value="0">Inativo</option></select
+        ><br />
+        <button type="submit">Salvar Alterações</button>
+      </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/ajustes/ajustesEmpresa.js"></script>
+    <script src="./js/sidebar.js"></script>
+  </body>
+</html>

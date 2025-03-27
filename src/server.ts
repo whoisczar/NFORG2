@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Servir arquivos estáticos a partir da pasta 'public'
-app.use(express.static(path.join(__dirname, "..", "public")));
+app.use(express.static(path.join(__dirname, "..", "public", "views")));
 
 // Rotas da API
 app.use("/empresa", empresaRoutes);
@@ -28,12 +28,12 @@ app.use("/itemNf", itemNfRoutes);
 
 // Rota para servir o arquivo index.html
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "views", "index.html"));
 });
 
 // Rota para servir o arquivo dashboard.html
 app.get("/dashboard", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "dashboard.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "views", "dashboard.html"));
 });
 
 // Iniciar o servidor

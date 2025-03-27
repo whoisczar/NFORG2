@@ -6,7 +6,9 @@ document
     const Produto = {
       nomeProduto: document.getElementById("nomeProduto").value,
       eanProduto: document.getElementById("eanProduto").value,
-      valorProduto: document.getElementById("valorProduto").value,
+      valorProduto: parseFloat(
+        document.getElementById("valorProduto").value.replace(",", ".")
+      ),
     };
 
     try {
@@ -45,12 +47,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     produto.forEach((produto) => {
       const row = document.createElement("tr");
-      row.setAttribute("data-id", produto.eanProduto); // Usa CPF/CNPJ como identificador
+      row.setAttribute("data-id", produto.idProduto); // Usa CPF/CNPJ como identificador
 
       row.innerHTML = `
           <td>${produto.nomeProduto}</td>
           <td>${produto.eanProduto}</td>
-          <td>${produto.valorProduto}</td>
+          <td>R$ ${produto.valorProduto}</td>
         `;
 
       tbody.appendChild(row);
@@ -58,9 +60,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.querySelectorAll("#tabelaProdutos tbody tr").forEach((row) => {
       row.addEventListener("click", () => {
-        const eanProduto = row.getAttribute("data-id"); // Obtém o CPF/CNPJ do usuário
-        if (eanProduto) {
-          window.location.href = `ajustesProduto.html?ean=${eanProduto}`;
+        const id = row.getAttribute("data-id"); // Obtém o CPF/CNPJ do usuário
+        if (id) {
+          window.location.href = `ajustesProduto.html?id=${id}`;
         } else {
           console.error("Ean do Produto não encontrado!");
         }
