@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${usuario.emailClient}</td>
         <td>${usuario.cargoClient}</td>
         <td>${usuario.statusClient === 1 ? "Ativo" : "Inativo"}</td>
+        <td><i class="fa-solid fa-bars"></i></td>
       `;
 
       tbody.appendChild(row);

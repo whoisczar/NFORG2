@@ -7,7 +7,12 @@
 }
 
 body {
-  background-color: #121212; /* Fundo escuro */
+  background: rgb(18, 18, 18);
+  background: linear-gradient(
+    90deg,
+    rgba(18, 18, 18, 1) 0%,
+    rgba(199, 129, 92, 1) 80%
+  );
   color: #ffffff; /* Texto branco */
   display: flex;
   justify-content: center;

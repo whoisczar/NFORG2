@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           <td>R$ ${nota.valorNotaFiscal}</td>
           <td>${new Date(nota.dataNotaFiscal).toLocaleDateString()}</td>
           <td>${new Date(nota.dataNotaCadastrada).toLocaleDateString()}</td>
+          <td><i class="fa-solid fa-bars"></i></td>
         `;
         tabelaNotas.appendChild(row);
       });
@@ -176,5 +177,5 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 // Função para redirecionar para a página de detalhes da nota
 window.detalharNota = function (idNotaFiscal) {
-  window.location.href = `ajustesNota.html?id=${idNotaFiscal}`;
+  window.location.href = `detalhesNota.html?id=${idNotaFiscal}`;
 };

@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <td>${produto.nomeProduto}</td>
           <td>${produto.eanProduto}</td>
           <td>R$ ${produto.valorProduto}</td>
+          <td><i class="fa-solid fa-bars"></i></td>
         `;
 
       tbody.appendChild(row);

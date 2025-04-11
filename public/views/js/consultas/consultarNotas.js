@@ -77,5 +77,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Função para exibir detalhes da nota fiscal
 window.detalharNota = function (idNotaFiscal) {
-  window.location.href = `ajustesNota.html?id=${idNotaFiscal}`;
+  window.location.href = `detalhesNota.html?id=${idNotaFiscal}`;
 };

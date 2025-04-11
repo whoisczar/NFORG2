@@ -83,6 +83,7 @@ async function carregarEmpresas() {
             <td>${empresa.nomeEmpresa}</td>
             <td>${empresa.cnpjEmpresa}</td>
             <td>${empresa.statusEmpresa === 1 ? "Ativo" : "Inativo"}</td>
+            <td><i class="fa-solid fa-bars"></i></td>
           `;
 
       row.addEventListener("click", () =>
