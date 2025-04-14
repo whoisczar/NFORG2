@@ -30,6 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
       text: " Cadastro de Produtos",
       href: "../cadastroProduto.html", // Link vazio ou ação personalizada
     },
+    {
+      icon: "fas fa-file-invoice-dollar",
+      text: " Consultar Relatórios",
+      href: "../relatorio.html", // Link vazio ou ação personalizada
+    },
   ];
 
   const sidebarList = document.querySelector(".sidebar ul");
