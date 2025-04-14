@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relatórios</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://img.icons8.com/?size=100&id=37930&format=png&color=000000"
+    />
+    <link rel="stylesheet" href="./styles/sidebar.css" />
+    <link rel="stylesheet" href="./styles/global.css" />
+    <script
+      src="https://kit.fontawesome.com/0f47102407.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="sidebar">
+      <button class="menu-item" id="toggleSidebar">
+        <i class="fa-solid fa-bars"></i>
+        <span class="menu-text">Recolher</span>
+      </button>
+      <h4>Menu</h4>
+      <ul>
+        <!-- Itens do menu serão gerados dinamicamente aqui -->
+      </ul>
+    </div>
+
+    <div class="content">
+      <h2>Relatórios</h2>
+
+      <!-- Relatório: Clientes por Cargo -->
+      <section>
+        <h3>Clientes por Cargo</h3>
+        <table id="relatorioCargo">
+          <thead>
+            <tr>
+              <th>Cargo</th>
+              <th>Total de Clientes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dados preenchidos dinamicamente -->
+          </tbody>
+        </table>
+      </section>
+
+      <br />
+      <hr />
+      <br />
+
+      <!-- Relatório: Clientes por Empresa -->
+      <section>
+        <h3>Clientes por Empresa</h3>
+        <table id="relatorioEmpresa">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Total de Clientes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dados preenchidos dinamicamente -->
+          </tbody>
+        </table>
+      </section>
+
+      <br />
+      <hr />
+      <br />
+
+      <!-- Relatório: Produtos mais Vendidos -->
+      <section>
+        <h3>Produtos Mais Vendidos</h3>
+        <table id="relatorioProdutos">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade Vendida</th>
+              <th>Valor Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dados preenchidos dinamicamente -->
+          </tbody>
+        </table>
+      </section>
+
+      <br />
+      <hr />
+      <br />
+
+      <!-- Relatório: Clientes Ativos vs Inativos -->
+      <section>
+        <h3>Clientes Ativos vs Inativos</h3>
+        <table id="relatorioAtivosInativos">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Total de Clientes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dados preenchidos dinamicamente -->
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <script src="./js/consultas/relatorios.js"></script>
+    <script src="./js/sidebar.js"></script>
+  </body>
+</html>

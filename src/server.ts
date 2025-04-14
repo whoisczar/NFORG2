@@ -6,6 +6,7 @@ import clientRoutes from "./routes/clientRoutes";
 import notaFiscalRoutes from "./routes/notaFiscalRoutes";
 import produtoRoutes from "./routes/produtoRoutes";
 import itemNfRoutes from "./routes/itemNfRoutes";
+import reportRoutes from "./routes/relatorioRoutes";
 
 const app = express();
 const port = 3000;
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "..", "public", "views")));
 
 // Rotas da API
+app.use("/relatorios", reportRoutes);
 app.use("/empresa", empresaRoutes);
 app.use("/client", clientRoutes);
 app.use("/notaFiscal", notaFiscalRoutes);

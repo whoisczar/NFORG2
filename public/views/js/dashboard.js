@@ -5,177 +5,111 @@ document.addEventListener("DOMContentLoaded", async function () {
     .getElementById("graficoProdutosMaisVendidos")
     ?.getContext("2d");
 
-  // Verifica se os elementos foram encontrados
-  if (!tabelaNotas || !ctxNotas || !ctxProdutos) {
-    console.error("Elementos não encontrados!");
-    return;
+  // Utilitário: cria uma linha da tabela
+  function criarLinhaNota(nota) {
+    const row = document.createElement("tr");
+    row.setAttribute("data-id", nota.idNotaFiscal);
+    row.innerHTML = `
+      <td>${nota.idNotaFiscal}</td>
+      <td>${nota.nomeClient}</td>
+      <td>R$ ${nota.valorNotaFiscal}</td>
+      <td>${new Date(nota.dataNotaFiscal).toLocaleDateString()}</td>
+      <td>${new Date(nota.dataNotaCadastrada).toLocaleDateString()}</td>
+      <td><i class="fa-solid fa-bars"></i></td>
+    `;
+    row.addEventListener("click", () => detalharNota(nota.idNotaFiscal));
+    return row;
   }
 
-  // Função para carregar notas fiscais
+  // Utilitário: gera gráfico (bar ou line)
+  function gerarGrafico(ctx, tipo, labels, dados, titulo) {
+    if (!ctx) return;
+
+    new Chart(ctx, {
+      type: tipo,
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: titulo,
+            data: dados,
+            backgroundColor: tipo === "bar" ? "#C7815C" : "white",
+            borderColor: "black",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true },
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: "top",
+          },
+        },
+      },
+    });
+  }
+
+  // Carrega as últimas 10 notas fiscais e cria gráfico por dia
   async function carregarNotasFiscais() {
-    try {
-      const response = await fetch("http://localhost:3000/notaFiscal");
-      if (!response.ok) {
-        throw new Error("Erro ao buscar notas fiscais");
-      }
+    const response = await fetch("http://localhost:3000/notaFiscal");
+    if (!response.ok) throw new Error("Erro ao buscar notas fiscais");
 
-      const notas = await response.json();
-      console.log("Notas fiscais recebidas");
+    const notas = await response.json();
+    const notasOrdenadas = notas.sort(
+      (a, b) => new Date(b.dataNotaFiscal) - new Date(a.dataNotaFiscal)
+    );
+    const ultimas10Notas = notasOrdenadas.slice(0, 10);
 
-      // Ordena as notas pela data de emissão em ordem decrescente
-      const notasOrdenadas = notas.sort((a, b) => {
-        return new Date(b.dataNotaFiscal) - new Date(a.dataNotaFiscal);
-      });
+    tabelaNotas.innerHTML = "";
+    ultimas10Notas.forEach((nota) =>
+      tabelaNotas.appendChild(criarLinhaNota(nota))
+    );
 
-      // Seleciona as 10 notas mais recentes
-      const ultimas10Notas = notasOrdenadas.slice(0, 10);
+    const notasPorDia = {};
+    notas.forEach((nota) => {
+      const data = new Date(nota.dataNotaFiscal).toLocaleDateString();
+      notasPorDia[data] = (notasPorDia[data] || 0) + 1;
+    });
 
-      // Limpa a tabela antes de preencher
-      tabelaNotas.innerHTML = "";
+    const labels = Object.keys(notasPorDia);
+    const data = Object.values(notasPorDia);
 
-      // Preenche a tabela com os dados filtrados
-      ultimas10Notas.forEach((nota) => {
-        const row = document.createElement("tr");
-        row.setAttribute("data-id", nota.idNotaFiscal); // Adiciona o ID da nota como atributo
-        row.innerHTML = `
-          <td>${nota.idNotaFiscal}</td>
-          <td>${nota.nomeClient}</td>
-          <td>R$ ${nota.valorNotaFiscal}</td>
-          <td>${new Date(nota.dataNotaFiscal).toLocaleDateString()}</td>
-          <td>${new Date(nota.dataNotaCadastrada).toLocaleDateString()}</td>
-          <td><i class="fa-solid fa-bars"></i></td>
-        `;
-        tabelaNotas.appendChild(row);
-      });
-
-      // Adiciona o evento de clique às linhas da tabela
-      tabelaNotas.querySelectorAll("tr[data-id]").forEach((row) => {
-        row.addEventListener("click", () => {
-          const idNotaFiscal = row.getAttribute("data-id"); // Obtém o ID da nota
-          detalharNota(idNotaFiscal); // Chama a função de redirecionamento
-        });
-      });
-
-      // Processa os dados para o gráfico de notas por dia
-      const notasPorDia = {};
-      notas.forEach((nota) => {
-        const data = new Date(nota.dataNotaFiscal).toLocaleDateString();
-        if (notasPorDia[data]) {
-          notasPorDia[data]++;
-        } else {
-          notasPorDia[data] = 1;
-        }
-      });
-
-      const labelsNotas = Object.keys(notasPorDia); // Dias
-      const dataNotas = Object.values(notasPorDia); // Quantidade de notas por dia
-
-      // Cria o gráfico de notas por dia
-      new Chart(ctxNotas, {
-        data: {
-          labels: labelsNotas,
-          datasets: [
-            {
-              type: "line",
-              label: "Notas por Dia",
-              data: dataNotas,
-              backgroundColor: "white",
-              borderColor: "black",
-              borderWidth: 1,
-            },
-            {
-              type: "bar",
-              label: "Notas por Dia",
-              data: dataNotas,
-              backgroundColor: "white",
-              borderColor: "black",
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-          plugins: {
-            legend: {
-              display: true,
-              position: "top",
-            },
-          },
-        },
-      });
-    } catch (error) {
-      console.error("Erro ao carregar notas fiscais:", error);
-    }
+    gerarGrafico(ctxNotas, "line", labels, data, "Notas por Dia");
   }
 
+  // Carrega produtos mais vendidos e exibe em gráfico
   async function carregarProdutosMaisVendidos() {
-    try {
-      // Defina as datas inicial e final (exemplo: último mês)
-      const dataInicial = "1999-01-01"; // Substitua pela data inicial desejada
-      const dataFinal = "9999-01-01"; // Substitua pela data final desejada
+    const dataInicial = "1999-01-01";
+    const dataFinal = "9999-01-01";
 
-      const response = await fetch(
-        `http://localhost:3000/produto/mais-vendidos?dataInicial=${dataInicial}&dataFinal=${dataFinal}`
-      );
-      if (!response.ok) {
-        throw new Error("Erro ao buscar produtos mais vendidos");
-      }
+    const response = await fetch(
+      `http://localhost:3000/produto/mais-vendidos?dataInicial=${dataInicial}&dataFinal=${dataFinal}`
+    );
+    if (!response.ok) throw new Error("Erro ao buscar produtos mais vendidos");
 
-      const produtos = await response.json();
-      console.log("Produtos mais vendidos recebidos");
+    const produtos = await response.json();
+    const labels = produtos.map((p) => p.nomeProduto);
+    const data = produtos.map((p) => p.total_vendido);
 
-      // Prepara os dados para o gráfico
-      const labelsProdutos = produtos.map((produto) => produto.nomeProduto);
-      const dataProdutos = produtos.map((produto) => produto.total_vendido);
-
-      // Cria o gráfico de produtos mais vendidos
-      new Chart(ctxProdutos, {
-        type: "bar",
-        data: {
-          labels: labelsProdutos,
-          datasets: [
-            {
-              label: "Quantidade Vendida",
-              data: dataProdutos,
-              backgroundColor: "#C7815C",
-              borderColor: "black",
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-          plugins: {
-            legend: {
-              display: true,
-              position: "top",
-            },
-          },
-        },
-      });
-    } catch (error) {
-      console.error("Erro ao carregar produtos mais vendidos:", error);
-    }
+    gerarGrafico(ctxProdutos, "bar", labels, data, "Produtos Mais Vendidos");
   }
 
-  // Carrega as notas fiscais e os produtos mais vendidos
-  await carregarNotasFiscais();
-  await carregarProdutosMaisVendidos();
+  // Executa tudo em paralelo e trata erros gerais
+  try {
+    await Promise.all([carregarNotasFiscais(), carregarProdutosMaisVendidos()]);
+  } catch (error) {
+    console.error("Erro geral no carregamento dos dados:", error);
+    alert("Erro ao carregar dados. Verifique o console para mais informações.");
+  }
 });
 
-// Função para redirecionar para a página de detalhes da nota
+// Redireciona para a tela de detalhes da nota fiscal
 window.detalharNota = function (idNotaFiscal) {
   window.location.href = `detalhesNota.html?id=${idNotaFiscal}`;
 };
