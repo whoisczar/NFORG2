@@ -13,6 +13,8 @@ interface NotaFiscal extends RowDataPacket {
     nomeProduto: string;
     quantidade: number;
     valorProduto: number;
+    tipoQtdItemNF: string;
+    impostosItemNF: number;
   }>;
 }
 
@@ -41,7 +43,6 @@ export const getNotasFiscaisByEmpresa = async (
   return results;
 };
 
-// Buscar todas as notas fiscais
 export const getAllNotasFiscais = async (): Promise<NotaFiscal[]> => {
   const query = `
     SELECT nf.idNotaFiscal, nf.valorNotaFiscal, nf.dataNotaFiscal, nf.dataNotaCadastrada, nf.cpf_cnpj, c.nomeClient
@@ -51,6 +52,7 @@ export const getAllNotasFiscais = async (): Promise<NotaFiscal[]> => {
   const [results] = await db.query<NotaFiscal[]>(query);
   return results;
 };
+
 export const getNotaFiscalById = async (
   id: number
 ): Promise<NotaFiscal | null> => {
@@ -78,12 +80,13 @@ export const getNotaFiscalById = async (
     return null;
   }
 
-  // Busca os produtos associados à nota fiscal
   const queryProdutos = `
     SELECT 
       p.nomeProduto, 
       i.qtdItemNF AS quantidade, 
-      i.valorItemNF AS valorProduto
+      i.valorItemNF AS valorProduto,
+      i.tipoQtdItemNF,
+      i.impostosItemNF
     FROM 
       itemNf i
     JOIN 
@@ -93,23 +96,24 @@ export const getNotaFiscalById = async (
   `;
   const [produtos] = await db.query<RowDataPacket[]>(queryProdutos, [id]);
 
-  // Retorna o objeto completo da nota fiscal
   return {
     ...notaFiscal[0],
     produtos: produtos.map((produto) => ({
       nomeProduto: produto.nomeProduto,
       quantidade: produto.quantidade,
       valorProduto: produto.valorProduto,
+      tipoQtdItemNF: produto.tipoQtdItemNF,
+      impostosItemNF: produto.impostosItemNF,
     })),
   };
 };
-// Atualizar uma nota fiscal
+
 export const updateNotaFiscal = async (
   id: number,
   valorNotaFiscal: number,
   dataNotaFiscal: Date,
   dataNotaCadastrada: Date,
-  cpf_cnpj: string // Alterado para string
+  cpf_cnpj: string
 ): Promise<boolean> => {
   const query = `
     UPDATE notafiscal
@@ -126,14 +130,12 @@ export const updateNotaFiscal = async (
   return results.affectedRows > 0;
 };
 
-// Deletar uma nota fiscal
 export const deleteNotaFiscal = async (id: number): Promise<boolean> => {
   const query = "DELETE FROM notafiscal WHERE idNotaFiscal = ?";
   const [results] = await db.query<ResultSetHeader>(query, [id]);
   return results.affectedRows > 0;
 };
 
-// Criar uma nota fiscal
 export const createNotaFiscal = async (
   cpf_cnpj: string,
   dataNotaFiscal: string,
@@ -143,30 +145,25 @@ export const createNotaFiscal = async (
   await connection.beginTransaction();
 
   try {
-    // Coletar todos os preços dos produtos em uma única consulta
     const idsProdutos = produtos.map((p) => p.idProduto);
     const [produtosInfo] = await connection.query<RowDataPacket[]>(
       `SELECT idProduto, valorProduto FROM produto WHERE idProduto IN (?)`,
       [idsProdutos]
     );
 
-    // Criar um mapa de idProduto para valorProduto
     const mapaProdutos = produtosInfo.reduce((acc, produto) => {
       acc[produto.idProduto] = produto.valorProduto;
       return acc;
     }, {} as Record<number, number>);
 
-    // Calcular o valor total da nota fiscal
     let valorNotaFiscal = 0;
     for (const produto of produtos) {
       const valorItem = mapaProdutos[produto.idProduto];
       valorNotaFiscal += valorItem * produto.quantidade;
     }
 
-    // Obter a data atual no formato YYYY-MM-DD
     const dataNotaCadastrada = new Date().toISOString().split("T")[0];
 
-    // Inserir a nota fiscal
     const queryNotaFiscal = `
       INSERT INTO notafiscal (cpf_cnpj, dataNotaFiscal, valorNotaFiscal, dataNotaCadastrada)
       VALUES (?, ?, ?, ?)
@@ -175,11 +172,10 @@ export const createNotaFiscal = async (
       cpf_cnpj,
       dataNotaFiscal,
       valorNotaFiscal,
-      dataNotaCadastrada, // Inserindo a data atual
+      dataNotaCadastrada,
     ]);
     const idNotaFiscal = results.insertId;
 
-    // Inserir os itens da nota fiscal
     for (const produto of produtos) {
       const valorItemNF = mapaProdutos[produto.idProduto];
       const valorTotItemNF = valorItemNF * produto.quantidade;
@@ -191,23 +187,20 @@ export const createNotaFiscal = async (
           idNotaFiscal,
           produto.idProduto,
           valorItemNF,
-          "UN", // Tipo de quantidade (unidade)
+          "UN",
           produto.quantidade,
-          0, // Impostos (ajuste necessário conforme o cálculo real)
+          0,
           valorTotItemNF,
         ]
       );
     }
 
-    // Commit da transação
     await connection.commit();
     return idNotaFiscal;
   } catch (err) {
-    // Rollback em caso de erro
     await connection.rollback();
     throw err;
   } finally {
-    // Liberar a conexão
     connection.release();
   }
 };

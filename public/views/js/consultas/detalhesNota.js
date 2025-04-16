@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         throw new Error("Erro ao carregar detalhes da nota fiscal");
       }
       const notaFiscal = await response.json();
+      console.log("Nota Fiscal:", notaFiscal);
       exibirDetalhesNota(notaFiscal);
 
       // Adiciona os eventos de exportação após carregar os dados
@@ -53,12 +54,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (notaFiscal.produtos && notaFiscal.produtos.length > 0) {
       notaFiscal.produtos.forEach((produto) => {
         const row = tabelaProdutos.insertRow();
-        row.insertCell().textContent = produto.nomeProduto; // Nome do produto
-        row.insertCell().textContent = produto.quantidade; // Quantidade
-        row.insertCell().textContent = `R$ ${produto.valorProduto}`; // Valor unitário
-        row.insertCell().textContent = `R$ ${
+        row.insertCell().textContent = produto.nomeProduto;
+        row.insertCell().textContent = produto.quantidade;
+        row.insertCell().textContent = produto.tipoQtdItemNF;
+        row.insertCell().textContent = `R$ ${produto.valorProduto}`;
+        row.insertCell().textContent = `R$ ${parseFloat(
+          produto.impostosItemNF
+        ).toFixed(2)}`; // Impostos
+        row.insertCell().textContent = `R$ ${(
           produto.valorProduto * produto.quantidade
-        }`; // Valor total
+        ).toFixed(2)}`;
       });
     } else {
       const row = tabelaProdutos.insertRow();
@@ -106,11 +111,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Definições iniciais
     const margemEsquerda = 10;
-    let posicaoY = 10; // Posição vertical inicial
+    let posicaoY = 10;
 
-    // Título da Nota Fiscal
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.text(
@@ -120,7 +123,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     posicaoY += 10;
 
-    // Informações da empresa
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
     doc.text(`Empresa: ${notaFiscal.nomeEmpresa}`, margemEsquerda, posicaoY);
@@ -135,7 +137,6 @@ document.addEventListener("DOMContentLoaded", function () {
       posicaoY
     );
     posicaoY += 8;
-
     doc.text(
       `Gerada em: ${formatarDataHoraBrasileira(dataGerada)}`,
       margemEsquerda,
@@ -143,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     posicaoY += 8;
 
-    // Valor total da nota
     doc.setFont("helvetica", "bold");
     doc.text(
       `Valor Total: R$ ${notaFiscal.valorNotaFiscal}`,
@@ -152,30 +152,26 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     posicaoY += 10;
 
-    // Adiciona os produtos (se houver)
     if (notaFiscal.produtos && notaFiscal.produtos.length > 0) {
       doc.setFont("helvetica", "bold");
       doc.text("Produtos:", margemEsquerda, posicaoY);
       posicaoY += 8;
 
-      // Cabeçalho da tabela
       doc.setFontSize(11);
-      doc.setFont("helvetica", "bold");
       doc.text("Nome", margemEsquerda, posicaoY);
       doc.text("Qtd", margemEsquerda + 80, posicaoY);
       doc.text("Preço Un.", margemEsquerda + 100, posicaoY);
       doc.text("Total", margemEsquerda + 140, posicaoY);
-      doc.line(margemEsquerda, posicaoY + 2, 200, posicaoY + 2); // Linha separadora
+      doc.line(margemEsquerda, posicaoY + 2, 200, posicaoY + 2);
       posicaoY += 6;
 
-      // Dados da tabela
       doc.setFont("helvetica", "normal");
       notaFiscal.produtos.forEach((produto) => {
         doc.text(produto.nomeProduto, margemEsquerda, posicaoY);
         doc.text(`${produto.quantidade}`, margemEsquerda + 80, posicaoY);
         doc.text(`R$ ${produto.valorProduto}`, margemEsquerda + 100, posicaoY);
         doc.text(
-          `R$ ${produto.valorProduto * produto.quantidade}`,
+          `R$ ${(produto.valorProduto * produto.quantidade).toFixed(2)}`,
           margemEsquerda + 140,
           posicaoY
         );
@@ -185,14 +181,10 @@ document.addEventListener("DOMContentLoaded", function () {
       doc.text("Nenhum produto encontrado.", margemEsquerda, posicaoY);
     }
 
-    // Adiciona o rodapé
     const larguraPagina = doc.internal.pageSize.width;
     const alturaPagina = doc.internal.pageSize.height;
 
-    // Linha horizontal no rodapé
     doc.line(10, alturaPagina - 15, larguraPagina - 10, alturaPagina - 15);
-
-    // Texto do rodapé centralizado
     doc.setFontSize(10);
     doc.setFont("helvetica", "italic");
     doc.text(
@@ -202,7 +194,6 @@ document.addEventListener("DOMContentLoaded", function () {
       { align: "center" }
     );
 
-    // Salva o PDF com o nome formatado corretamente
     const dataFormatadaArquivo = formatarDataParaArquivo(dataGerada);
     doc.save(
       `NF_${notaFiscal.idNotaFiscal}_${notaFiscal.nomeEmpresa}_${dataFormatadaArquivo}.pdf`
@@ -211,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Função para exportar os dados para CSV
   function exportarParaCsv(notaFiscal) {
-    // Formata a data para YYYY-MM-DD
     function formatarDataParaCsv(data) {
       return (
         data.toLocaleDateString("pt-BR") +
@@ -223,8 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const dataNotaFiscal = new Date(notaFiscal.dataNotaFiscal);
     const dataGerada = new Date();
 
-    // Cabeçalho do CSV
-    let conteudoCsv = "\uFEFF"; // BOM para garantir UTF-8
+    let conteudoCsv = "\uFEFF";
     conteudoCsv += `"Nota Fiscal","Empresa","Data","Valor Total"\n`;
     conteudoCsv += `"${notaFiscal.idNotaFiscal}","${
       notaFiscal.nomeEmpresa
@@ -232,21 +221,18 @@ document.addEventListener("DOMContentLoaded", function () {
       notaFiscal.valorNotaFiscal
     }"\n\n`;
 
-    // Cabeçalho dos produtos
     conteudoCsv += `"Produto","Quantidade","Valor Unitário","Valor Total"\n`;
 
-    // Adiciona os produtos (se houver)
     if (notaFiscal.produtos && notaFiscal.produtos.length > 0) {
       notaFiscal.produtos.forEach((produto) => {
         conteudoCsv += `"${produto.nomeProduto}","${produto.quantidade}","${
           produto.valorProduto
-        }","${produto.valorProduto * produto.quantidade}"\n`;
+        }","${(produto.valorProduto * produto.quantidade).toFixed(2)}"\n`;
       });
     } else {
       conteudoCsv += `"Nenhum produto encontrado."\n`;
     }
 
-    // Cria um blob com o conteúdo e gera um link para download
     const blob = new Blob([conteudoCsv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -255,8 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
       notaFiscal.nomeEmpresa
     }_${formatarDataParaArquivo(dataGerada)}.csv`;
     link.click();
-
-    // Libera o objeto URL
     URL.revokeObjectURL(url);
   }
 
