@@ -153,7 +153,6 @@ label {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
   background-color: var(--clr-surface-tonal-a10);
   color: var(--clr-light-a0);
   border-radius: 8px;
@@ -216,4 +215,44 @@ table tbody tr td {
 
 #exportArea button:hover {
   background-color: var(--clr-primary-a10);
+}
+
+/* ============== TABELA COM SCROLL ============== */
+.tabela-scroll {
+  position: relative;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 4px;
+  border: 1px solid var(--clr-surface-a20);
+  margin-top: 20px;
+}
+
+/* Remove o espaço entre cabeçalho e corpo */
+.tabela-scroll table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Estilos para células do corpo */
+.tabela-scroll td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--clr-surface-a20);
+}
+
+/* Efeitos de hover e zebrado */
+.tabela-scroll tbody tr:hover {
+  background-color: var(--clr-surface-a20);
+}
+
+.tabela-scroll tbody tr:nth-child(even) {
+  background-color: var(--clr-surface-a20);
+}
+
+.tabela-scroll tbody tr:nth-child(odd) {
+  background-color: var(--clr-surface-a30);
+}
+
+#btnFiltrar {
+  margin-bottom: 10px;
 }
